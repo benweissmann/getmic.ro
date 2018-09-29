@@ -54,12 +54,12 @@ platform=''
 machine=`uname -m`
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  if [[ "$machine" == *"64" ]]; then
-    platform='linux64'
+  if [[ "$machine" == "arm"* || "$machine" == "aarch"* ]]; then
+    platform='linux-arm'
   elif [[ "$machine" == *"86" ]]; then
     platform='linux32'
-  elif [[ "$machine" == "arm"* ]]; then
-    platform='linux-arm'
+  elif [[ "$machine" == *"64" ]]; then
+    platform='linux64'
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   platform='osx'
