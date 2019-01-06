@@ -4,11 +4,6 @@ os:
   - linux
   - osx
 
-jobs:
-  include:
-    - stage: lint
-      if: os=osx
-      script: ./ci/runLint.sh
-
-    - stage: test
-      script: ./ci/runTest.sh
+script:
+  - ./ci/runLint.sh
+  - ./ci/runTest.sh
