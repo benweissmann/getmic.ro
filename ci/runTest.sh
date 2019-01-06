@@ -3,4 +3,4 @@
 set -euo pipefail
 
 bash index.sh
-./micro -h | grep 'Usage: micro'
+./micro -version | grep 'Version:'
