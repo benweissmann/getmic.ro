@@ -1,5 +1,7 @@
 # getmic.ro
 
+[![Build Status](https://travis-ci.org/benweissmann/getmic.ro.svg?branch=master)](https://travis-ci.org/benweissmann/getmic.ro)
+
 The fastest way to install [Micro](https://micro-editor.github.io/)
 
 `curl https://getmic.ro | bash`
