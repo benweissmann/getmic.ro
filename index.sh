@@ -21,11 +21,11 @@ set -u
 set -o pipefail
 
 function githubLatestTag {
-    finalUrl=`curl https://github.com/$1/releases/latest -s -L -I -o /dev/null -w '%{url_effective}'`
+    finalUrl=$(curl "https://github.com/$1/releases/latest" -s -L -I -o /dev/null -w '%{url_effective}')
     echo "${finalUrl##*v}"
 }
 
-UNKNOWN_OS_MSG=<<EOM
+UNKNOWN_OS_MSG=<<-'EOM'
 /=====================================\
 |      COULD NOT DETECT PLATFORM      |
 \=====================================/
@@ -51,7 +51,7 @@ EOM
 
 
 platform=''
-machine=`uname -m`
+machine=$(uname -m)
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   if [[ "$machine" == "arm"* || "$machine" == "aarch"* ]]; then
@@ -107,23 +107,23 @@ To continue with installation, please choose from one of the following values:
 - win32
 - win64
 EOM
-  read -p "> " platform
+  read -rp "> " platform
 else
   echo "Detected platform: $platform"
 fi
 
-TAG=`githubLatestTag zyedidia/micro`
+TAG=$(githubLatestTag zyedidia/micro)
 
-echo "Downloading https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-"$platform".tar.gz"
-curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-"$platform".tar.gz" > micro.tar.gz
+echo "Downloading https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz"
+curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
 
 tar -xvzf micro.tar.gz "micro-$TAG/micro"
-mv micro-$TAG/micro ./micro
+mv "micro-$TAG/micro" ./micro
 
 rm micro.tar.gz
-rm -rf micro-$TAG
+rm -rf "micro-$TAG"
 
-cat <<-EOM
+cat <<-'EOM'
 
 
  __  __ _                  ___           _        _ _          _ _
