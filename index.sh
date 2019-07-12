@@ -53,7 +53,7 @@ EOM
 platform=''
 machine=$(uname -m)
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+if [[ "$OSTYPE" == "linux"* ]]; then
   if [[ "$machine" == "arm"* || "$machine" == "aarch"* ]]; then
     platform='linux-arm'
   elif [[ "$machine" == *"86" ]]; then
