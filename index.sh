@@ -20,10 +20,35 @@ set -e
 set -u
 set -o pipefail
 
-function githubLatestTag {
-    finalUrl=$(curl "https://github.com/$1/releases/latest" -s -L -I -o /dev/null -w '%{url_effective}')
-    echo "${finalUrl##*v}"
+function githubLatestStable {
+  TAG=$(curl "https://github.com/$1/releases/latest" -s -L -I -o /dev/null -w '%{url_effective}')
+  echo "https://github.com/$1/releases/download/v${TAG##*v}/micro-${TAG##*v}-$platform.tar.gz"
 }
+
+function githubLatestNightly {
+  pyL="import sys, json"
+  pyC="[print(x['browser_download_url']) for x in json.load(sys.stdin)['assets']]"
+  if command -v python3 &>/dev/null; then
+    nightly=$(echo $(curl -s https://api.github.com/repos/$1/releases/tags/nightly) | \
+      python3 -c "$pyL; $pyC")
+  elif command -v python2 &>/dev/null; then
+    nightly=$(echo $(curl -s https://api.github.com/repos/$1/releases/tags/nightly) | \
+      python2 -c "from __future__ import print_function; $pyL; $pyC")
+  elif command -v python &>/dev/null; then
+    nightly=$(echo $(curl -s https://api.github.com/repos/$1/releases/tags/nightly) | \
+      python -c "from __future__ import print_function; $pyL; $pyC")
+  else
+    echo "A Python installation is required in order to install nightly builds."
+    exit 126
+  fi
+  nightly=(`echo ${nightly}`);
+  for x in "${nightly[@]}"; do
+    if [[ "$x" == *"$platform"* ]]; then
+      echo "$x"
+    fi
+  done
+}
+
 
 UNKNOWN_OS_MSG=<<-'EOM'
 /=====================================\
@@ -112,16 +137,20 @@ else
   echo "Detected platform: $platform"
 fi
 
-TAG=$(githubLatestTag zyedidia/micro)
+if [[ "$@" == *"nightly"* ]]; then
+  URL=$(githubLatestNightly zyedidia/micro)
+else
+  URL=$(githubLatestStable zyedidia/micro)
+fi
 
-echo "Downloading https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz"
-curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
+if [[ "`tar --version`" == *"bsd"* ]]; then
+  targ="--include"
+else
+  targ="--wildcards"
+fi
 
-tar -xvzf micro.tar.gz "micro-$TAG/micro"
-mv "micro-$TAG/micro" ./micro
-
-rm micro.tar.gz
-rm -rf "micro-$TAG"
+echo "Downloading $URL"
+curl -sL "$URL" | tar -xvzf - --strip=1 $targ "*/micro"
 
 cat <<-'EOM'
 
