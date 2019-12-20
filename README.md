@@ -13,6 +13,18 @@ To verify the script, you can download it and checksum it. The sha256 checksum i
     curl -o getmicro.sh https://getmic.ro
     shasum -a 256 getmicro.sh # and check the output
     bash getmicro.sh
+    
+## Contributing
+
+Thank you for contributing! We use the Github pull request workflow: fork this repo, make your changes, and then submit a pull request. There's a couple things you'll need to do to get your PR merged:
+
+- Make sure all of the Travis CI tests pass. Travis CI will report test failures on the PR page once you open it.
+
+- If you introduce new behavior, update the Travis CI tests to test that behavior.
+
+- If you introduce new user-facing options or behavior, update this README to document that behavior.
+
+If you're not sure how to do any of these things, feel free to open a PR with your work-in-progress and whatever questions you have!
 
 ## Acknowledgments:
 
