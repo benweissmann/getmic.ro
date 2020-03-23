@@ -25,30 +25,6 @@ function githubLatestTag {
     echo "${finalUrl##*v}"
 }
 
-UNKNOWN_OS_MSG=<<-'EOM'
-/=====================================\
-|      COULD NOT DETECT PLATFORM      |
-\=====================================/
-
-Uh oh! We couldn't automatically detect your operating system. You can file a
-bug here: https://github.com/benweissmann/getmic.ro
-
-To continue with installation, please choose from one of the following values:
-
-- freebsd32
-- freebsd64
-- linux-arm
-- linux32
-- linux64
-- netbsd32
-- netbsd64
-- openbsd32
-- openbsd64
-- osx
-- win32
-- win64
-EOM
-
 
 platform=''
 machine=$(uname -m)
