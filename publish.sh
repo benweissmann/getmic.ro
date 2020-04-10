@@ -11,3 +11,7 @@ aws s3 cp ./index.sh s3://getmic.ro/index.sh \
 aws cloudfront create-invalidation \
   --distribution-id E2G1BMMQRRIIVO \
   --paths '/*'
+
+git add ./README.md
+git commit -m "[chore] Update README with new checksum"
+git push
