@@ -30,6 +30,8 @@ platform=''
 machine=$(uname -m)
 
 if [[ "$OSTYPE" == "linux"* ]]; then
+  if [[ "$machine" == "arm64"* || "$machine" == "aarch64"* ]]; then
+    platform='linux-arm64'
   if [[ "$machine" == "arm"* || "$machine" == "aarch"* ]]; then
     platform='linux-arm'
   elif [[ "$machine" == *"86" ]]; then
@@ -73,6 +75,7 @@ To continue with installation, please choose from one of the following values:
 - freebsd32
 - freebsd64
 - linux-arm
+- linux-arm64
 - linux32
 - linux64
 - netbsd32
