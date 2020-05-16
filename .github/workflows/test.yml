@@ -31,5 +31,5 @@ jobs:
 
     - name: Lint
       run: |
-        sudo apt-get update && suod apt-get install -y shellcheck
+        sudo apt-get update && sudo apt-get install -y shellcheck
         ./scripts/runLint.sh
