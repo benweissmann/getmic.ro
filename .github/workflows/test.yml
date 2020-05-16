@@ -53,3 +53,27 @@ jobs:
 
     - name: Test
       run: ./ci/runVagrantTest.sh ${{ matrix.vagrant_dir }}
+
+  test_docker:
+    name: Test on ${{ matrix.docker_image }} with Docker
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        docker_image:
+        - arm32v7/ubuntu:bionic
+        - arm64v8/ubuntu:bionic
+        - bash:5.0
+        - bash:4.4
+        - bash:4.3
+        - bash:4.2
+        - bash:4.1
+        - bash:4.0
+        - bash:3.2
+        - bash:3.1
+        - bash:3.0
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v1
+
+    - name: Test
+      run: ./ci/runDockerTest.sh ${{ matrix.docker_image }}
