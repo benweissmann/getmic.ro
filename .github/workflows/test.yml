@@ -1,7 +1,7 @@
 name: Test
 on:
   push:
-    branches: 
+    branches:
       - master
   pull_request:
     branches:
@@ -33,3 +33,23 @@ jobs:
       run: |
         sudo apt-get update && sudo apt-get install -y shellcheck
         ./ci/runLint.sh
+
+  test_vagrant:
+    name: Test on ${{ matrix.vagrant_dir }} with Vagrant
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        vagrant_dir:
+        - testboxes/freebsd32
+        - testboxes/freebsd64
+        - testboxes/linux32
+        - testboxes/netbsd32
+        - testboxes/netbsd64
+        - testboxes/openbsd32
+        - testboxes/openbsd64
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v1
+
+    - name: Test
+      run: ./ci/runVagrantTest.sh ${{ matrix.vagrant_dir }}
