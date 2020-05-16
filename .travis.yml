@@ -1,9 +1,0 @@
-language: shell
-
-os:
-  - linux
-  - osx
-
-script:
-  - ./ci/runLint.sh
-  - ./ci/runTest.sh
