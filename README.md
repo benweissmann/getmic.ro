@@ -1,6 +1,6 @@
 # getmic.ro
 
-[![Build Status](https://travis-ci.org/benweissmann/getmic.ro.svg?branch=master)](https://travis-ci.org/benweissmann/getmic.ro)
+![Test](https://github.com/benweissmann/getmic.ro/workflows/Test/badge.svg)
 
 The fastest way to install [Micro](https://micro-editor.github.io/)
 
@@ -18,9 +18,9 @@ To verify the script, you can download it and checksum it. The sha256 checksum i
 
 Thank you for contributing! We use the Github pull request workflow: fork this repo, make your changes, and then submit a pull request. There's a couple things you'll need to do to get your PR merged:
 
-- Make sure all of the Travis CI tests pass. Travis CI will report test failures on the PR page once you open it.
+- Make sure all of the tests pass. Github Actions will report test failures on the PR page once you open it.
 
-- If you introduce new behavior, update the Travis CI tests to test that behavior.
+- If you introduce new behavior, update the Github Actions tests (in [`.github/workflows/test.yml`](https://github.com/benweissmann/getmic.ro/blob/master/.github/workflows/test.yml)) to test that behavior.
 
 - If you introduce new user-facing options or behavior, update this README to document that behavior.
 
