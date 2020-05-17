@@ -80,3 +80,33 @@ jobs:
 
     - name: Test
       run: ./ci/runDockerTest.sh ${{ matrix.docker_image }} bash
+
+  test_shells:
+    name: Test alternate shell ${{ matrix.shell }} on Ubuntu docker
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shell:
+        - zsh
+        - dash
+        - ksh
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v1
+
+    - name: Test
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ${{ matrix.shell }}
+        ./ci/runTest.sh ${{ matrix.shell }}
+
+  test_alpine:
+    name: Test busybox on alpine
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v1
+
+    - name: Test
+      run: ./ci/runDockerTest.sh alpine:latest sh
