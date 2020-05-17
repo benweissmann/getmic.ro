@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
 if [ -x "$(command -v apt-get)" ]; then
   # Debian/Ubuntu
@@ -13,6 +13,5 @@ elif [ -x "$(command -v apk)" ]; then
   apk add libc6-compat
 fi
 
-cat /app/index.sh | bash
-
-./micro -version | grep "Version:"
+cd /app
+"$1" ./ci/runTest.sh "$1"
