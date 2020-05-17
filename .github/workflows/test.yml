@@ -90,3 +90,4 @@ jobs:
 
     - name: Test
       run: ./ci/runTest.sh
+      shell: bash
