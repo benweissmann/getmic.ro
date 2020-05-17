@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
 if [ -x "$(command -v apt-get)" ]; then
   # Debian/Ubuntu
@@ -14,4 +14,4 @@ elif [ -x "$(command -v apk)" ]; then
 fi
 
 cd /app
-./ci/runTest.sh
+"$1" ./ci/runTest.sh "$1"
