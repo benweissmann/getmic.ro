@@ -29,7 +29,9 @@ function githubLatestTag {
 platform=''
 machine=$(uname -m)
 
-if [[ "$OSTYPE" == "linux"* ]]; then
+if test "${GETMICRO_PLATFORM:-x}" != "x"; then
+  platform="$GETMICRO_PLATFORM"
+elif [[ "$OSTYPE" == "linux"* ]]; then
   if [[ "$machine" == "arm"* || "$machine" == "aarch"* ]]; then
     platform='linux-arm'
   elif [[ "$machine" == *"86" ]]; then
@@ -82,8 +84,17 @@ To continue with installation, please choose from one of the following values:
 - osx
 - win32
 - win64
+
+Export your selection as the GETMICRO_PLATFORM environment variable, and then
+re-run this script.
+
+For example:
+
+  $ export GETMICRO_PLATFORM=linux64
+  $ curl https://getmic.ro | bash
+
 EOM
-  read -rp "> " platform
+  exit 1
 else
   echo "Detected platform: $platform"
 fi

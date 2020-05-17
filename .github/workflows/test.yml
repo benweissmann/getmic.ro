@@ -80,3 +80,13 @@ jobs:
 
     - name: Test
       run: ./ci/runDockerTest.sh ${{ matrix.docker_image }}
+
+  test_windows:
+    name: Test on Windows
+    runs-on: windows-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v1
+
+    - name: Test
+      run: ./ci/runTest.sh
