@@ -2,17 +2,19 @@
 
 set -eu
 
-cat index.sh | "$1"
+shell=${1:-bash}
+
+cat index.sh | "$shell"
 ./micro -version | grep 'Version:'
 
 unset GETMICRO_PLATFORM
 export OSTYPE='xxx'
 
-cat index.sh | "$1" | grep 'COULD NOT DETECT PLATFORM'
+cat index.sh | "$shell" | grep 'COULD NOT DETECT PLATFORM'
 
 export GETMICRO_PLATFORM=linux32
-cat index.sh | "$1" | grep 'Detected platform: linux32'
+cat index.sh | "$shell" | grep 'Detected platform: linux32'
 
 export OSTYPE='darwin'
 export GETMICRO_PLATFORM=linux64
-cat index.sh | "$1" | grep 'Detected platform: linux64'
+cat index.sh | "$shell" | grep 'Detected platform: linux64'
