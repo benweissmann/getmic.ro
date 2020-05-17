@@ -91,3 +91,5 @@ jobs:
     - name: Test
       run: ./ci/runTest.sh
       shell: bash
+      env:
+        GETMICRO_PLATFORM: win64
