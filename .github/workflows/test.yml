@@ -57,7 +57,7 @@ jobs:
       run: ./ci/runVagrantTest.sh ${{ matrix.vagrant_dir }}
 
   test_docker:
-    name: Test on ${{ matrix.docker_image }} with Docker
+    name: Test on ${{ matrix.docker_image }} with Bash in Docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -79,7 +79,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Test
-      run: ./ci/runDockerTest.sh ${{ matrix.docker_image }}
+      run: ./ci/runDockerTest.sh ${{ matrix.docker_image }} bash
 
   test_windows:
     name: Test on Windows
