@@ -96,7 +96,9 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Test
-      run: ./ci/runTest.sh ${{ matrix.shell }}
+      run: |
+        apt-get install -y ${{ matrix.shell }}
+        ./ci/runTest.sh ${{ matrix.shell }}
 
   test_alpine:
     name: Test busybox on alpine
@@ -106,4 +108,4 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Test
-      run: ./ci/runDockerTest.sh alpine:latest ${{ matrix.shell }}
+      run: ./ci/runDockerTest.sh alpine:latest sh
