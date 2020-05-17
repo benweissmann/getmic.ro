@@ -13,6 +13,7 @@ jobs:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, ubuntu-16.04, macOS-latest]
     steps:
@@ -38,6 +39,7 @@ jobs:
     name: Test on ${{ matrix.vagrant_dir }} with Vagrant
     runs-on: macos-latest
     strategy:
+      fail-fast: false
       matrix:
         vagrant_dir:
         - testboxes/freebsd32
@@ -58,6 +60,7 @@ jobs:
     name: Test on ${{ matrix.docker_image }} with Docker
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         docker_image:
         - arm32v7/ubuntu:bionic
