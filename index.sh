@@ -31,6 +31,7 @@ else
   case "$(uname -s)" in
     "Linux")
       case "$machine" in
+        "arm64"* | "aarch64"* ) platform='linux-arm64' ;;
         "arm"* | "aarch"*) platform='linux-arm' ;;
         *"86") platform='linux32' ;;
         *"64") platform='linux64' ;;
@@ -72,6 +73,7 @@ To continue with installation, please choose from one of the following values:
 - freebsd32
 - freebsd64
 - linux-arm
+- linux-arm64
 - linux32
 - linux64
 - netbsd32
