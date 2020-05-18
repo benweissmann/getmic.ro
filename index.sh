@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # This script installs micro.
 #
@@ -15,54 +15,52 @@
 #   - Loosely based on the Chef curl|bash: https://docs.chef.io/install_omnibus.html
 #   - ASCII art courtesy of figlet: http://www.figlet.org/
 
+set -e -u
 
-set -e
-set -u
-set -o pipefail
-
-function githubLatestTag {
-    finalUrl=$(curl "https://github.com/$1/releases/latest" -s -L -I -o /dev/null -w '%{url_effective}')
-    echo "${finalUrl##*v}"
+githubLatestTag() {
+  finalUrl=$(curl "https://github.com/$1/releases/latest" -s -L -I -o /dev/null -w '%{url_effective}')
+  printf "%s\n" "${finalUrl##*v}"
 }
-
 
 platform=''
 machine=$(uname -m)
 
-if [[ "$OSTYPE" == "linux"* ]]; then
-  if [[ "$machine" == "arm64"* || "$machine" == "aarch64"* ]]; then
-    platform='linux-arm64'
-  if [[ "$machine" == "arm"* || "$machine" == "aarch"* ]]; then
-    platform='linux-arm'
-  elif [[ "$machine" == *"86" ]]; then
-    platform='linux32'
-  elif [[ "$machine" == *"64" ]]; then
-    platform='linux64'
-  fi
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-  platform='osx'
-elif [[ "$OSTYPE" == "freebsd"* ]]; then
-  if [[ "$machine" == *"64" ]]; then
-    platform='freebsd64'
-  elif [[ "$machine" == *"86" ]]; then
-    platform='freebsd32'
-  fi
-elif [[ "$OSTYPE" == "openbsd"* ]]; then
-  if [[ "$machine" == *"64" ]]; then
-    platform='openbsd64'
-  elif [[ "$machine" == *"86" ]]; then
-    platform='openbsd32'
-  fi
-elif [[ "$OSTYPE" == "netbsd"* ]]; then
-  if [[ "$machine" == *"64" ]]; then
-    platform='netbsd64'
-  elif [[ "$machine" == *"86" ]]; then
-    platform='netbsd32'
-  fi
+if [ "${GETMICRO_PLATFORM:-x}" != "x" ]; then
+  platform="$GETMICRO_PLATFORM"
+else
+  case "$(uname -s)" in
+    "Linux")
+      case "$machine" in
+        "arm64"* | "aarch64"* ) platform='linux-arm64' ;;
+        "arm"* | "aarch"*) platform='linux-arm' ;;
+        *"86") platform='linux32' ;;
+        *"64") platform='linux64' ;;
+      esac
+      ;;
+    "Darwin") platform='osx' ;;
+    *"FreeBSD"*)
+      case "$machine" in
+        *"86") platform='freebsd32' ;;
+        *"64") platform='freebsd64' ;;
+      esac
+      ;;
+    "OpenBSD")
+      case "$machine" in
+        *"86") platform='openbsd32' ;;
+        *"64") platform='openbsd64' ;;
+      esac
+      ;;
+    "NetBSD")
+      case "$machine" in
+        *"86") platform='netbsd32' ;;
+        *"64") platform='netbsd64' ;;
+      esac
+      ;;
+  esac
 fi
 
-if test "x$platform" = "x"; then
-  cat <<EOM
+if [ "x$platform" = "x" ]; then
+  cat << 'EOM'
 /=====================================\\
 |      COULD NOT DETECT PLATFORM      |
 \\=====================================/
@@ -85,15 +83,26 @@ To continue with installation, please choose from one of the following values:
 - osx
 - win32
 - win64
+
+Export your selection as the GETMICRO_PLATFORM environment variable, and then
+re-run this script.
+
+For example:
+
+  $ export GETMICRO_PLATFORM=linux64
+  $ curl https://getmic.ro | bash
+
 EOM
-  read -rp "> " platform
+  exit 1
 else
-  echo "Detected platform: $platform"
+  printf "Detected platform: %s\n" "$platform"
 fi
 
 TAG=$(githubLatestTag zyedidia/micro)
 
-echo "Downloading https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz"
+printf "Latest Version: %s\n" "$TAG"
+printf "Downloading https://github.com/zyedidia/micro/releases/download/v%s/micro-%s-%s.tar.gz\n" "$TAG" "$TAG" "$platform"
+
 curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
 
 tar -xvzf micro.tar.gz "micro-$TAG/micro"
@@ -104,16 +113,15 @@ rm -rf "micro-$TAG"
 
 cat <<-'EOM'
 
-
  __  __ _                  ___           _        _ _          _ _
 |  \/  (_) ___ _ __ ___   |_ _|_ __  ___| |_ __  | | | ___  __| | |
 | |\/| | |/ __| '__/ _ \   | || '_ \/ __| __/ _\ | | |/ _ \/ _  | |
 | |  | | | (__| | | (_) |  | || | | \__ \ || (_| | | |  __/ (_| |_|
 |_|  |_|_|\___|_|  \___/  |___|_| |_|___/\__\__,_|_|_|\___|\__,_(_)
 
-Micro has been downloaded to the current directory. You can run it with:
+Micro has been downloaded to the current directory.
+You can run it with:
 
 ./micro
-
 
 EOM

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Fake uname for testing
+
+echo xxx
