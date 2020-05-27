@@ -18,9 +18,19 @@
 set -e -u
 
 githubLatestTag() {
-  finalUrl=$(curl "https://github.com/$1/releases/latest" -s -L -I -o /dev/null -w '%{url_effective}')
+  if [ "$downloader" = 'curl' ]; then
+    finalUrl=$(curl "https://github.com/$1/releases/latest" -s -L -I -o /dev/null -w '%{url_effective}')
+  else
+    finalUrl=$(wget "https://github.com/$1/releases/latest" --content-disposition -O /dev/null 2>&1 | grep '^Location: ' | cut -d'/' -f 8 | cut -d' ' -f1 | cut -c 2-)
+  fi
   printf "%s\n" "${finalUrl##*v}"
 }
+
+if [ -x "$(command -v curl)" ]; then
+  downloader='curl'
+else
+  downloader='wget'
+fi
 
 platform=''
 machine=$(uname -m)
@@ -103,7 +113,11 @@ TAG=$(githubLatestTag zyedidia/micro)
 printf "Latest Version: %s\n" "$TAG"
 printf "Downloading https://github.com/zyedidia/micro/releases/download/v%s/micro-%s-%s.tar.gz\n" "$TAG" "$TAG" "$platform"
 
-curl -L --progress-bar "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
+if [ "$downloader" = 'curl' ]; then
+  curl -L --progress-bar "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
+else
+  wget --content-disposition -q --show-progress --progress=bar:force "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" -O micro.tar.gz
+fi
 
 tar -xzf micro.tar.gz "micro-$TAG/micro"
 mv "micro-$TAG/micro" ./micro
