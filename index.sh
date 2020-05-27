@@ -103,7 +103,7 @@ TAG=$(githubLatestTag zyedidia/micro)
 printf "Latest Version: %s\n" "$TAG"
 printf "Downloading https://github.com/zyedidia/micro/releases/download/v%s/micro-%s-%s.tar.gz\n" "$TAG" "$TAG" "$platform"
 
-curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
+curl -L --progress-bar "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
 
 tar -xzf micro.tar.gz "micro-$TAG/micro"
 mv "micro-$TAG/micro" ./micro
