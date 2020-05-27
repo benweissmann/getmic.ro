@@ -105,7 +105,7 @@ printf "Downloading https://github.com/zyedidia/micro/releases/download/v%s/micr
 
 curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
 
-tar -xvzf micro.tar.gz "micro-$TAG/micro"
+tar -xzf micro.tar.gz "micro-$TAG/micro"
 mv "micro-$TAG/micro" ./micro
 
 rm micro.tar.gz
