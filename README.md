@@ -20,10 +20,10 @@ While getmic.ro is tested primarily with bash, it should be compatible with any 
 
 ### Verify the script checksum
 
-To verify the script, you can download it and checksum it. The sha256 checksum is `08c2651500958d2c79e96b4fab4629cdca8c9d07f916b81e5fabae961657f4de`.
+To verify the script, you can download it and checksum it. The sha256 checksum is `fa1ab666f08a5ad8221531b31a3365f1d5a756c9f851bcce6ae558ff8de777ee`.
 
     curl -o getmicro.sh https://getmic.ro
-    shasum -a 256 getmicro.sh # and check the output
+    if [ "$(shasum -a 256 getmicro.sh)" # and check the output
     bash getmicro.sh
 
 ## Contributing
