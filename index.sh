@@ -119,10 +119,10 @@ installAlternativeEditor() {
   # add micro as an editor alternative
   altlink="$(update-alternatives --query editor | grep Link | cut -f 2 -d " ")"
   printf "Installing Micro as an alternative %s at: %s\n" "$altlink" "$directory"
-  sudo update-alternatives --install "$altlink" editor "$directory/micro" 80
+  sudo update-alternatives --install "$altlink" editor "$directory/micro" 80 2> /dev/null
 }
 checkForExistingInstall() {
-  return $(printf "%s" "$otherEditors" | grep -x -e "$directory/micro" -e "$absolute/micro" -c 2> /dev/null)
+  return "$(printf "%s" "$otherEditors" | grep -x -e "$directory/micro" -e "$absolute/micro" -c 2> /dev/null)"
 }
 otherEditors=
 if command -v update-alternatives > /dev/null; then
