@@ -111,6 +111,44 @@ mv "micro-$TAG/micro" ./micro
 rm micro.tar.gz
 rm -rf "micro-$TAG"
 
+
+
+# Next, add micro as an official editor in Linux systems if we are on the path
+
+installAlternativeEditor() {
+  # add micro as an editor alternative
+  altlink="$(update-alternatives --query editor | grep Link | cut -f 2 -d " ")"
+  printf "Installing Micro as an alternative %s at: %s\n" "$altlink" "$directory"
+  sudo update-alternatives --install "$altlink" editor "$directory/micro" 80
+}
+checkForExistingInstall() {
+  return $(printf "%s" "$otherEditors" | grep -x -e "$directory/micro" -e "$absolute/micro" -c 2> /dev/null)
+}
+otherEditors=
+if command -v update-alternatives > /dev/null; then
+  # NOTE that this is purposely variable assignment instead of comparison
+  if otherEditors="$(update-alternatives --list editor 2> /dev/null)"; then
+    # Use absolute path for the directory if a relative path was specified.
+    directory="$(pwd)"
+    absolute="$directory"
+    if command -v readlink >/dev/null ; then
+      absolute="$(readlink -f "$directory")"
+    elif command -v realpath >/dev/null ; then
+      absolute="$(realpath "$directory")"
+    fi
+    
+    if checkForExistingInstall; then
+      case ":$PATH:" in
+        *:"$directory":*) installAlternativeEditor;;
+        *:"$absolute":*) installAlternativeEditor;;
+        *) ;;
+      esac
+    fi
+  fi
+fi
+
+
+
 cat <<-'EOM'
 
  __  __ _                  ___           _        _ _          _ _
