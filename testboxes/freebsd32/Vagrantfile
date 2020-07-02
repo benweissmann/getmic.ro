@@ -67,7 +67,8 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    pkg add -f https://pkg.freebsd.org/FreeBSD:11:i386/latest/All/pkg-1.14.4.txz
+    export PKG_VERSION=`fetch -qo - https://pkg.freebsd.org/FreeBSD:11:i386/latest/All/ | grep -o 'href="pkg-1\\.[0-9.]\\+.txz"' | grep -o 'pkg-[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+'`
+    IGNORE_OSVERSION=yes pkg add -f https://pkg.freebsd.org/FreeBSD:11:i386/latest/All/$PKG_VERSION.txz
     IGNORE_OSVERSION=yes pkg update -f
     pkg install -y bash curl
     ln -sf /lib/libc.so.7 /usr/lib/libdl.so.1
