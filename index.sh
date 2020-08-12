@@ -28,8 +28,8 @@ machine=$(uname -m)
 if [ "${GETMICRO_PLATFORM:-x}" != "x" ]; then
   platform="$GETMICRO_PLATFORM"
 else
-  case "$(uname -s)" in
-    "Linux")
+  case "$(uname -s | tr '[:upper:]' '[:lower:]')" in
+    "linux")
       case "$machine" in
         "arm64"* | "aarch64"* ) platform='linux-arm64' ;;
         "arm"* | "aarch"*) platform='linux-arm' ;;
@@ -37,23 +37,29 @@ else
         *"64") platform='linux64' ;;
       esac
       ;;
-    "Darwin") platform='osx' ;;
-    *"FreeBSD"*)
+    "darwin") platform='osx' ;;
+    *"freebsd"*)
       case "$machine" in
         *"86") platform='freebsd32' ;;
         *"64") platform='freebsd64' ;;
       esac
       ;;
-    "OpenBSD")
+    "openbsd")
       case "$machine" in
         *"86") platform='openbsd32' ;;
         *"64") platform='openbsd64' ;;
       esac
       ;;
-    "NetBSD")
+    "netbsd")
       case "$machine" in
         *"86") platform='netbsd32' ;;
         *"64") platform='netbsd64' ;;
+      esac
+      ;;
+    "msys"*|"cygwin"*|"mingw"*|*"_nt"*|"win"*)
+      case "$machine" in
+        *"86") platform='win32' ;;
+        *"64") platform='win64' ;;
       esac
       ;;
   esac
@@ -100,15 +106,25 @@ fi
 
 TAG=$(githubLatestTag zyedidia/micro)
 
+if [ "x$platform" = "xwin64" ] || [ "x$platform" = "xwin32" ]; then
+  extension='zip'
+else
+  extension='tar.gz'
+fi
+
 printf "Latest Version: %s\n" "$TAG"
-printf "Downloading https://github.com/zyedidia/micro/releases/download/v%s/micro-%s-%s.tar.gz\n" "$TAG" "$TAG" "$platform"
+printf "Downloading https://github.com/zyedidia/micro/releases/download/v%s/micro-%s-%s.%s\n" "$TAG" "$TAG" "$platform" "$extension"
 
-curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.tar.gz" > micro.tar.gz
+curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension" > "micro.$extension"
 
-tar -xvzf micro.tar.gz "micro-$TAG/micro"
+case "$extension" in
+  "zip") unzip -j "micro.$extension" -d "micro-$TAG" ;;
+  "tar.gz") tar -xvzf "micro.$extension" "micro-$TAG/micro" ;;
+esac
+
 mv "micro-$TAG/micro" ./micro
 
-rm micro.tar.gz
+rm "micro.$extension"
 rm -rf "micro-$TAG"
 
 cat <<-'EOM'
