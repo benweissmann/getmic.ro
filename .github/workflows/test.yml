@@ -15,13 +15,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-16.04, macOS-latest]
+        os: [ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest]
     steps:
     - name: Check out code
       uses: actions/checkout@v1
 
     - name: Test
       run: ./ci/runTest.sh
+      shell: bash
 
   lint:
     name: Lint
