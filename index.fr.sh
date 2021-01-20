@@ -1,19 +1,22 @@
 #!/bin/sh
 
-# This script installs micro.
+# Ce script installe micro.
 #
-# Quick install: `curl https://getmic.ro | bash`
+# TODO: change url below to french file one
+# Installation rapide : `curl https://getmic.ro | bash`
 #
-# This script will install micro to the directory you're in. To install
-# somewhere else (e.g. /usr/local/bin), cd there and make sure you can write to
-# that directory, e.g. `cd /usr/local/bin; curl https://getmic.ro | sudo bash`
+# Ce script va installer micro dans le répertoire courant. Pour l'installer
+# ailleurs (par ex. dans /usr/loca/bin), déplacez vous y avec cd et vérifiez vos
+# droits d'écriture, par ex. `cd /usr/local/bin ; curl https://getmic.ro | bash`
+# TODO: change url upper to french file one
+# 
+# Vous avez un bug ? Rapportez le à https://github.com/benweissmann/getmic.ro
+# (rapport de bugs en anglais)
 #
-# Found a bug? Report it here: https://github.com/benweissmann/getmic.ro
-#
-# Acknowledgments:
-#   - Micro, of course: https://micro-editor.github.io/
-#   - Loosely based on the Chef curl|bash: https://docs.chef.io/install_omnibus.html
-#   - ASCII art courtesy of figlet: http://www.figlet.org/
+# Remerciements:
+#   - Micro, bien spur : https://micro-editor.github.io/
+#   - Entièrement basé sur curl|bash : https://docs.chef.io/install_omnibus.html
+#   - ASCII arts fais avec figlet : http://www.figlet.org/
 
 set -e -u
 
@@ -67,14 +70,14 @@ fi
 
 if [ "x$platform" = "x" ]; then
   cat << 'EOM'
-/=====================================\\
-|      COULD NOT DETECT PLATFORM      |
-\\=====================================/
+/=================================================\\
+|      IMPOSSIBLE DE DECTECTER LA PLATEFORME      |
+\\=================================================/
 
-Uh oh! We couldn't automatically detect your operating system. You can file a
-bug here: https://github.com/benweissmann/getmic.ro
+Oh oh ! Nous n'avons pas pu détecter automatiquement votre système d'exploitation.
+rapports de bugs ici : https://github.com/benweissmann/getmic.ro
 
-To continue with installation, please choose from one of the following values:
+Pour continuer l'installation, veuillez choisir une des propositions suivantes :
 
 - freebsd32
 - freebsd64
@@ -90,18 +93,19 @@ To continue with installation, please choose from one of the following values:
 - win32
 - win64
 
-Export your selection as the GETMICRO_PLATFORM environment variable, and then
-re-run this script.
+Exportez votre choix dans la variable d'environnement GETMICRO_PLATFORM,
+puis ré-exécutez ce script.
 
-For example:
+Par exemple :
 
   $ export GETMICRO_PLATFORM=linux64
   $ curl https://getmic.ro | bash
 
 EOM
+# TODO: change url 3 lines upper to french file one
   exit 1
 else
-  printf "Detected platform: %s\n" "$platform"
+  printf "Plateforme détectée : %s\n" "$platform"
 fi
 
 TAG=$(githubLatestTag zyedidia/micro)
@@ -112,8 +116,8 @@ else
   extension='tar.gz'
 fi
 
-printf "Latest Version: %s\n" "$TAG"
-printf "Downloading https://github.com/zyedidia/micro/releases/download/v%s/micro-%s-%s.%s\n" "$TAG" "$TAG" "$platform" "$extension"
+printf "Dernière version : %s\n" "$TAG"
+printf "Téléchargement de https://github.com/zyedidia/micro/releases/download/v%s/micro-%s-%s.%s\n" "$TAG" "$TAG" "$platform" "$extension"
 
 curl -L "https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension" > "micro.$extension"
 
@@ -135,8 +139,8 @@ cat <<-'EOM'
 | |  | | | (__| | | (_) |  | || | | \__ \ || (_| | | |  __/ (_| |_|
 |_|  |_|_|\___|_|  \___/  |___|_| |_|___/\__\__,_|_|_|\___|\__,_(_)
 
-Micro has been downloaded to the current directory.
-You can run it with:
+Micro a été téléchargé dans le dossier actuel !
+Vous pouvez le lancez avec :
 
 ./micro
 
