@@ -16,7 +16,7 @@
 # Remerciements:
 #   - Micro, bien spur : https://micro-editor.github.io/
 #   - Entièrement basé sur curl|bash : https://docs.chef.io/install_omnibus.html
-#   - ASCII arts fais avec figlet : http://www.figlet.org/
+#   - ASCII arts faits avec figlet : http://www.figlet.org/
 
 set -e -u
 
@@ -133,11 +133,11 @@ rm -rf "micro-$TAG"
 
 cat <<-'EOM'
 
- __  __ _                  ___           _        _ _          _ _
-|  \/  (_) ___ _ __ ___   |_ _|_ __  ___| |_ __  | | | ___  __| | |
-| |\/| | |/ __| '__/ _ \   | || '_ \/ __| __/ _\ | | |/ _ \/ _  | |
-| |  | | | (__| | | (_) |  | || | | \__ \ || (_| | | |  __/ (_| |_|
-|_|  |_|_|\___|_|  \___/  |___|_| |_|___/\__\__,_|_|_|\___|\__,_(_)
+ __  __ _                            __ _    __   ___           _        _ _   __   _
+|  \/  (_) ___ _ __ ___     __ _    /_/| |_ /_/  |_ _|_ __  ___| |_ __ _| | | /_/  | |
+| |\/| | |/ __| '__/ _ \   / _` |  / _ \ __/ _ \  | || '_ \/ __| __/ _` | | |/ _ \ | |
+| |  | | | (__| | | (_) | | (_| | |  __/ ||  __/  | || | | \__ \ || (_| | | |  __/ |_|
+|_|  |_|_|\___|_|  \___/   \__,_|  \___|\__\___| |___|_| |_|___/\__\__,_|_|_|\___| (_)
 
 Micro a été téléchargé dans le dossier actuel !
 Vous pouvez le lancez avec :
