@@ -2,6 +2,8 @@
 
 ![Test](https://github.com/benweissmann/getmic.ro/workflows/Test/badge.svg)
 
+> Vous ne comprenez pas l'anglais ? vous parlez français ? Regardez le [*LISEZ-MOI* français](./README.fr.md) !
+
 The fastest way to install [Micro](https://micro-editor.github.io/)
 
 `curl https://getmic.ro | bash`
@@ -34,7 +36,7 @@ Thank you for contributing! We use the Github pull request workflow: fork this r
 
 - If you introduce new behavior, update the Github Actions tests (in [`.github/workflows/test.yml`](https://github.com/benweissmann/getmic.ro/blob/master/.github/workflows/test.yml)) to test that behavior.
 
-- If you introduce new user-facing options or behavior, update this README to document that behavior.
+- If you introduce new user-facing options or behavior, update the README files to document that behavior (don't translate if you don't know the destination file's language).
 
 If you're not sure how to do any of these things, feel free to open a PR with your work-in-progress and whatever questions you have!
 
