@@ -2,13 +2,13 @@
 
 ![Test](https://github.com/benweissmann/getmic.ro/workflows/Test/badge.svg)
 
-> Vous ne comprenez pas l'anglais ? vous parlez français ? Regardez le [*LISEZ-MOI* français](./README.fr.md) !
-
 The fastest way to install [Micro](https://micro-editor.github.io/)
 
 `curl https://getmic.ro | bash`
 
 This script will install micro to the directory you're in. To install somewhere else (e.g. /usr/local/bin), cd there and make sure you can write to that directory, e.g. `cd /usr/local/bin; curl https://getmic.ro | sudo bash`
+
+> Vous ne comprenez pas l'anglais? vous parlez français? Regardez le [*LISEZ-MOI* français](./README.fr.md)!
 
 ## Advanced usage
 
