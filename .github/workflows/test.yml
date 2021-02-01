@@ -48,7 +48,6 @@ jobs:
         - testboxes/linux32
         - testboxes/netbsd32
         - testboxes/netbsd64
-        - testboxes/openbsd32
         - testboxes/openbsd64
     steps:
     - name: Check out code
