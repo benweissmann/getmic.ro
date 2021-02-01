@@ -112,6 +112,15 @@ else
   extension='tar.gz'
 fi
 
+if [ "x$platform" = "xlinux64" ]; then
+  # Detect musl libc (source: https://stackoverflow.com/a/60471114)
+  libc=$(ldd /bin/ls | grep 'musl' | head -1 | cut -d ' ' -f1)
+  if [ ! -z "$libc" ]; then
+    # Musl libc; use the staticly-compiled versioon
+    platform='linux64-static'
+  fi
+fi
+
 printf "Latest Version: %s\n" "$TAG"
 printf "Downloading https://github.com/zyedidia/micro/releases/download/v%s/micro-%s-%s.%s\n" "$TAG" "$TAG" "$platform" "$extension"
 
