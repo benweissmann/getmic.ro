@@ -8,6 +8,8 @@ The fastest way to install [Micro](https://micro-editor.github.io/)
 
 This script will install micro to the directory you're in. To install somewhere else (e.g. /usr/local/bin), cd there and make sure you can write to that directory, e.g. `cd /usr/local/bin; curl https://getmic.ro | sudo bash`
 
+> Vous ne comprenez pas l'anglais? vous parlez français? Regardez le [*LISEZ-MOI* français](./README.fr.md)!
+
 ## Advanced usage
 
 There's a couple other things you can do with getmic.ro.
@@ -34,7 +36,7 @@ Thank you for contributing! We use the Github pull request workflow: fork this r
 
 - If you introduce new behavior, update the Github Actions tests (in [`.github/workflows/test.yml`](https://github.com/benweissmann/getmic.ro/blob/master/.github/workflows/test.yml)) to test that behavior.
 
-- If you introduce new user-facing options or behavior, update this README to document that behavior.
+- If you introduce new user-facing options or behavior, update the README files to document that behavior (don't translate if you don't know the destination file's language).
 
 If you're not sure how to do any of these things, feel free to open a PR with your work-in-progress and whatever questions you have!
 
