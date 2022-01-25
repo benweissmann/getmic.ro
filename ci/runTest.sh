@@ -2,7 +2,7 @@
 
 set -eu
 
-shell=${1:-bash}
+shell=${1:-sh}
 
 cat index.sh | "$shell"
 (./micro -version | grep 'Version:') || \
@@ -11,7 +11,10 @@ cat index.sh | "$shell"
 unset GETMICRO_PLATFORM
 export PATH="./ci/fixtures:$PATH"
 
-(cat index.sh | "$shell" | grep 'COULD NOT DETECT PLATFORM') || \
+# Clean up from former tests
+rm -rf ./micro* 2>/dev/null || true
+
+(cat index.sh | "$shell" 2>&1 | grep 'COULD NOT DETECT PLATFORM') || \
   (echo 'Fail: unrecognized platform test' && exit 1)
 
 export GETMICRO_PLATFORM=linux32
