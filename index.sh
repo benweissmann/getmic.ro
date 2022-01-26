@@ -19,12 +19,6 @@ set -e -u
 
 githubLatestTag() {
   latestJSON="$( eval "$http 'https://api.github.com/repos/$1/releases/latest'" 2>/dev/null )" || true
-  if echo "$latestJSON" | grep 'API rate limit exceeded' >/dev/null 2>&1 ; then
-    # Don't leak and don't abuse please and thank you
-    ACCESS_TOKEN_DONT_LEAK="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"
-    
-    latestJSON="$( eval "$http --header='Authorization: $ACCESS_TOKEN_DONT_LEAK' 'https://api.github.com/repos/$1/releases/latest'" 2>/dev/null )" || true
-  fi
   
   versionNumber=''
   if ! echo "$latestJSON" | grep 'API rate limit exceeded' >/dev/null 2>&1 ; then
