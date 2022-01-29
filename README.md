@@ -6,10 +6,10 @@ The fastest way to install [Micro](https://micro-editor.github.io/)
 
 ```Bash
 # local install just for your user
-curl https://getmic.ro | sh
+curl https://getmic.ro | bash
 ```
 
-Or, using wget in place of curl:
+Or, using `wget` in place of `curl` and any `sh`ell interpreter in place of `bash`:
 
 ```Bash
 # local install just for your user
