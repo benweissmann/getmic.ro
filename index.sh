@@ -268,6 +268,25 @@ fi
 
 TAG=$(githubLatestTag zyedidia/micro)
 
+if command -v grep >/dev/null 2>&1 ; then
+  if ! echo "v$TAG" | grep -E '^v[0-9]+[.][0-9]+[.][0-9]+$' >/dev/null 2>&1 ; then
+      cat 1>&2 << 'EOM'
+/=====================================\\
+|         INVALID TAG RECIEVED         |
+\\=====================================/
+
+Uh oh! We recieved an invalid tag and cannot be sure that the tag will not break
+ this script.
+
+Please open an issue on GitHub at https://github.com/benweissmann/getmic.ro with
+ the invalid tag included:
+
+EOM
+    echo "> $TAG" 1>&2
+    exit 1
+  fi
+fi
+
 if [ "${platform:-x}" = "win64" ] || [ "${platform:-x}" = "win32" ]; then
   extension='zip'
 else
