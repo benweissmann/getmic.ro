@@ -4,29 +4,84 @@
 
 The fastest way to install [Micro](https://micro-editor.github.io/)
 
-`curl https://getmic.ro | bash`
+```Bash
+# local install just for your user
+curl https://getmic.ro | bash
+```
 
-This script will install micro to the directory you're in. To install somewhere else (e.g. /usr/local/bin), cd there and make sure you can write to that directory, e.g. `cd /usr/local/bin; curl https://getmic.ro | sudo bash`
+Or, using `wget` in place of `curl` and any `sh`ell interpreter in place of `bash`:
 
-> Vous ne comprenez pas l'anglais? vous parlez français? Regardez le [*LISEZ-MOI* français](./README.fr.md)!
+```Bash
+# local install just for your user
+wget -O- https://getmic.ro | sh
+```
+
+This script will install micro to the directory you're in. To install somewhere else (e.g. /usr/local/bin), cd there and make sure you can write to that directory, e.g. `cd /usr/local/bin; curl https://getmic.ro | sudo sh` like so:
+
+```Bash
+# global install for all users
+cd /usr/bin
+curl https://getmic.ro | sudo sh
+```
+
+Or, using wget and su in place of curl and sudo:
+
+```Bash
+# global install for all users
+su - root -c 'cd /usr/bin; wget -O- https://getmic.ro sh'
+```
+
+> Vous ne comprenez pas l'anglais? vous parlez français? **Regardez le [*LISEZ-MOI* français](./README.fr.md)!**
 
 ## Advanced usage
 
-There's a couple other things you can do with getmic.ro.
+There's a couple other things you can do with getmic.ro. Listed below are environment variables you can choose from:
 
-### Use another POSIX shell
+* `GETMICRO_HTTP=<COMMAND ...ARGS>`
+    + Use this command with arguments deliminated by spaces to download files off the internet.
+        - It MUST follow redirects (via HTTP Location headers).
+        - It MUST print the resulting file contents to stdout.
+        - It MUST accept the next argument to be the URL of the file to be downloaded
+        - It IS OPTIONAL for the command to also accept a `--header` parameter used for non-essential GitHub authentication fallback shim.
+    + For example, to force using `curl`, do: `curl https://getmic.ro | GETMICRO_HTTP="curl -L" sh`
+    + For example, to force using `wget`, do: `wget -O- https://getmic.ro | GETMICRO_HTTP="wget -O-" sh`
+* `GETMICRO_PLATFORM=[freebsd32 | freebsd64 linux-arm | linux-arm64 | linux32 | linux64 | linux64-static | netbsd32 | netbsd64 | openbsd32 | openbsd64 | osx | win32 | win64]`
+    + This manually overrides the platform detection mechanism and downloads the binaries for the platform you specify
+    + One usage of this is specifying `https://getmic.ro | GETMICRO_PLATFORM=linux64-static sh` when using an incompatible libc implementation such as musl.
+* `GETMICRO_REGISTER=[y | n]`
+    + Whether to register micro with `update-alternatives` so you can seamlessly use micro as the system text editor.
+        - y => yes
+        - n => no
+    + Defaults to `GETMICRO_REGISTER=n` if left unspecified and no interactive TTY is detected.
+    + If GETMICRO_REGISTER is defined but the system does not support `update-alternatives`, then this option is silently ignored.
+    + When enabled, getmicro must be running with sufficient priveledges (typically the root user) to use `update-alternatives`, otherwise getmicro will exit with an error.
+    + Specifying this variable will skip the prompt when an interactive TTY is detected.
+    + For example, to never register: `curl https://getmic.ro | GETMICRO_REGISTER=n sh`
+    + For example, to always register: `curl https://getmic.ro | GETMICRO_REGISTER=y sh`
 
-While getmic.ro is tested primarily with bash, it should be compatible with any POSIX shell (we test zsh, dash, ksh, and busybox). If you don't have `bash`, you can just use:
+Putting it all together, the following command line would always use wget, always install the linux32 binaries, and always register with `update-alternatives`:
 
-`curl https://getmic.ro | sh`
+```Bash
+wget -O- https://getmic.ro | GETMICRO_HTTP="wget -O-" GETMICRO_PLATFORM=linux32 GETMICRO_REGISTER=y sh
+```
 
 ### Verify the script checksum
 
-To verify the script, you can download it and checksum it. The sha256 checksum is `43fa64b603c88bb2cef003802572b9afcebc52742e909b50abc6e73abdb1e829`.
+To verify the script, you can download it and checksum it. The sha256 checksum is `f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf`.
 
-    curl -o getmicro.sh https://getmic.ro
-    shasum -a 256 getmicro.sh # and check the output
-    bash getmicro.sh
+```Bash
+gmcr="$(curl https://getmic.ro)" && [ $(echo "$gmcr" | shasum -a 256 | cut -d' ' -f1) = f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf ] && echo "$gmcr" | sh
+```
+    
+Alternatively, you can use the following manual method.
+
+```Bash
+# 1. Manually verify that this outputs f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf
+curl https://getmic.ro | shasum -a 256
+
+# 2. If #1 was successful, then execute getmicro
+curl https://getmic.ro | sh
+```
 
 ## Contributing
 

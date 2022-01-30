@@ -9,7 +9,7 @@ vagrant up
 vagrant ssh -c 'rm -f ./micro'
 
 # Run the script
-cat ../../index.sh | vagrant ssh -c bash
+cat ../../index.sh | vagrant ssh -c sh
 
 # Test that it installed
 vagrant ssh -c './micro -version | grep "Version:"'

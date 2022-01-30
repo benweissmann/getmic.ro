@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest]
+        os: [ubuntu-18.04, macos-10.15, windows-2022]
     steps:
     - name: Check out code
       uses: actions/checkout@v1
@@ -26,27 +26,30 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - name: Check out code
       uses: actions/checkout@v1
 
     - name: Lint
       run: |
-        sudo apt-get update && sudo apt-get install -y shellcheck
+        command -v apt-get >/dev/null 2>&1 && sudo apt-get update && sudo apt-get install -y shellcheck
         ./ci/runLint.sh
 
   test_vagrant:
     name: Test on ${{ matrix.vagrant_dir }} with Vagrant
-    runs-on: macos-latest
+    runs-on: macos-10.15
     strategy:
       fail-fast: false
       matrix:
         vagrant_dir:
         - testboxes/freebsd32
         - testboxes/freebsd64
-        - testboxes/linux32
-        - testboxes/netbsd32
+        - testboxes/debian32
+        - testboxes/debian64
+        - testboxes/linux-arm64
+        - testboxes/opensuse64
+        - testboxes/devuan64
         - testboxes/netbsd64
         - testboxes/openbsd64
     steps:
@@ -58,7 +61,7 @@ jobs:
 
   test_docker:
     name: Test on ${{ matrix.docker_image }} with Bash in Docker
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -83,7 +86,7 @@ jobs:
 
   test_shells:
     name: Test alternate shell ${{ matrix.shell }} on Ubuntu docker
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -103,7 +106,7 @@ jobs:
 
   test_alpine:
     name: Test busybox on alpine
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - name: Check out code
       uses: actions/checkout@v1

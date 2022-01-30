@@ -6,29 +6,75 @@
 
 Le moyen le plus rapide d'installer [Micro](https://micro-editor.github.io/)
 
-`curl https://getmic.ro | bash`
+```Bash
+# installation locale rien que pour vous
+curl https://getmic.ro | sh
+```
 
-Ce script installera micro dans le dossier dans lequel vous vous trouvez. Pour l'installer ailleurs (p.e. /usr/local/bin), déplacez vous y (avec `cd`) et assurez-vous d'avoir les droits d'écriture du dossier, p.e. `cd /usr/local/bin; curl https://getmic.ro | sudo bash`
+Ou:
+
+```Bash
+# installation locale rien que pour vous
+wget -O- https://getmic.ro | sh
+```
+
+Ce script installera micro dans le dossier dans lequel vous vous trouvez. Pour l'installer ailleurs (p.e. /usr/local/bin), déplacez vous y (avec `cd`) et assurez-vous d'avoir les droits d'écriture du dossier, p.e. `cd /usr/local/bin; curl https://getmic.ro | sudo bash`:
+
+```Bash
+# installation globale pour tout le monde
+cd /usr/bin
+curl https://getmic.ro | sudo sh
+```
+
+Ou:
+
+```Bash
+# installation globale pour tout le monde
+su - root -c 'cd /usr/bin; wget -O- https://getmic.ro sh'
+```
 
 > NOTE : micro ainsi que le script de téléchargement sont en anglais. Si vous ne comprenez pas quelque chose, n'hésitez pas à vous renseigner sur [ce wiki français](https://wiki.ubuntu-fr.org/micro) !
 
 ## Utilisation avancée
 
-Vous pouvez aussi faire d'autres choses avec getmic.ro.
+Vous pouvez aussi faire d'autres choses avec getmic.ro. La documentation Français est incomplète. Si possible, veuillez vous référer à la [documentation en anglais](./README.md).
 
-### Utiliser un autre shell POSIX
+* `GETMICRO_HTTP=<COMMAND ...ARGS>`
+    + Exemple: `curl https://getmic.ro | GETMICRO_HTTP="curl -L" sh`
+    + Exemple: `wget -O- https://getmic.ro | GETMICRO_HTTP="wget -O-" sh`
+* `GETMICRO_PLATFORM=[freebsd32 | freebsd64 linux-arm | linux-arm64 | linux32 | linux64 | linux64-static | netbsd32 | netbsd64 | openbsd32 | openbsd64 | osx | win32 | win64]`
+    + Par défaut: `GETMICRO_PLATFORM=n`
+    + Par exemple, si votre libc est musl, alors: `https://getmic.ro | GETMICRO_PLATFORM=linux64-static sh`
+* `GETMICRO_REGISTER=[y | n]`
+    + Ceci contrôle s'il faut utiliser `update-alternatives` ou non.
+        - y => oui
+        - n => non
+    + Exemple: `curl https://getmic.ro | GETMICRO_REGISTER=n sh`
+    + Exemple: `curl https://getmic.ro | GETMICRO_REGISTER=y sh`
 
-Même si getmic.ro est essentiellement testé avec bash, il devrait être compatible avec n'importe quel autre script compatible POSIX (on essaye avec zsh, dash, ksh, and busybox). Si vous n'avzez pas `bash`, vous pouvez tout simplement entrer :
+Exemple: 
 
-`curl https://getmic.ro | sh`
+```Bash
+wget -O- https://getmic.ro | GETMICRO_HTTP="wget -O-" GETMICRO_PLATFORM=linux32 GETMICRO_REGISTER=y sh
+```
 
 ### Vérifier la somme de contrôle (checksum)
 
-Pour vérifer le script, vous pouvez le télécharger et chercher sa somme de contrôle. Le sha256 est `43fa64b603c88bb2cef003802572b9afcebc52742e909b50abc6e73abdb1e829`.
+Pour vérifer le script, vous pouvez le télécharger et chercher sa somme de contrôle. Le sha256 est `f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf`.
 
-    curl -o getmicro.sh https://getmic.ro
-    shasum -a 256 getmicro.sh # vérifiez ici la sortie
-    bash getmicro.sh
+```Bash
+gmcr="$(curl https://getmic.ro)" && [ $(echo "$gmcr" | shasum -a 256 | cut -d' ' -f1) = f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf ] && echo "$gmcr" | sh
+```
+
+Ou:
+
+```Bash
+# 1. Vérifiez manuellement que cette sortie f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf
+curl https://getmic.ro | shasum -a 256
+
+# 2. Si #1 a réussi, exécutez getmicro
+curl https://getmic.ro | sh
+```
 
 ## Contribution
 
