@@ -67,16 +67,16 @@ wget -O- https://getmic.ro | GETMICRO_HTTP="wget -O-" GETMICRO_PLATFORM=linux32 
 
 ### Verify the script checksum
 
-To verify the script, you can download it and checksum it. The sha256 checksum is `f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf`.
+To verify the script, you can download it and checksum it. The sha256 checksum is `6e5c1ae93df5f58b26b4772664ff43f2bd3147811565f40e2177efb0da3fc0bf`.
 
 ```Bash
-gmcr="$(curl https://getmic.ro)" && [ $(echo "$gmcr" | shasum -a 256 | cut -d' ' -f1) = f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf ] && echo "$gmcr" | sh
+gmcr="$(curl https://getmic.ro)" && [ $(echo "$gmcr" | shasum -a 256 | cut -d' ' -f1) = 6e5c1ae93df5f58b26b4772664ff43f2bd3147811565f40e2177efb0da3fc0bf ] && echo "$gmcr" | sh
 ```
     
 Alternatively, you can use the following manual method.
 
 ```Bash
-# 1. Manually verify that this outputs f131cd109fef176aed8e308a8584da1b21c744d72e35290c9859a9ecb4789ccf
+# 1. Manually verify that this outputs 6e5c1ae93df5f58b26b4772664ff43f2bd3147811565f40e2177efb0da3fc0bf
 curl https://getmic.ro | shasum -a 256
 
 # 2. If #1 was successful, then execute getmicro
