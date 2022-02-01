@@ -167,6 +167,57 @@ else
   echo "Detected platform: $platform"
 fi
 
+TAG=$(githubLatestTag zyedidia/micro)
+
+if command -v grep >/dev/null 2>&1 ; then
+  if ! echo "v$TAG" | grep -E '^v[0-9]+[.][0-9]+[.][0-9]+$' >/dev/null 2>&1 ; then
+      cat 1>&2 << 'EOM'
+/=====================================\\
+|         INVALID TAG RECIEVED         |
+\\=====================================/
+
+Uh oh! We recieved an invalid tag and cannot be sure that the tag will not break
+ this script.
+
+Please open an issue on GitHub at https://github.com/benweissmann/getmic.ro with
+ the invalid tag included:
+
+EOM
+    echo "> $TAG" 1>&2
+    exit 1
+  fi
+fi
+
+if [ "${platform:-x}" = "win64" ] || [ "${platform:-x}" = "win32" ]; then
+  extension='zip'
+else
+  extension='tar.gz'
+fi
+
+if [ "${platform:-x}" = "linux64" ]; then
+  # Detect musl libc (source: https://stackoverflow.com/a/60471114)
+  libc=$(ldd /bin/ls | grep 'musl' | head -1 | cut -d ' ' -f1)
+  if [ -n "$libc" ]; then
+    # Musl libc; use the staticly-compiled versioon
+    platform='linux64-static'
+  fi
+fi
+
+echo "Latest Version: $TAG"
+echo "Downloading https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension"
+
+eval "$http 'https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension'" > "micro.$extension"
+
+case "$extension" in
+  "zip") unzip -j "micro.$extension" -d "micro-$TAG" ;;
+  "tar.gz") tar -xvzf "micro.$extension" "micro-$TAG/micro" ;;
+esac
+
+mv "micro-$TAG/micro" ./micro
+
+rm "micro.$extension"
+rm -rf "micro-$TAG"
+
 if command -v alternatives >/dev/null 2>&1 ; then
   # RHEL family(?)
   altcmd="alternatives"
@@ -265,57 +316,6 @@ EOM
     fi
   fi
 fi
-
-TAG=$(githubLatestTag zyedidia/micro)
-
-if command -v grep >/dev/null 2>&1 ; then
-  if ! echo "v$TAG" | grep -E '^v[0-9]+[.][0-9]+[.][0-9]+$' >/dev/null 2>&1 ; then
-      cat 1>&2 << 'EOM'
-/=====================================\\
-|         INVALID TAG RECIEVED         |
-\\=====================================/
-
-Uh oh! We recieved an invalid tag and cannot be sure that the tag will not break
- this script.
-
-Please open an issue on GitHub at https://github.com/benweissmann/getmic.ro with
- the invalid tag included:
-
-EOM
-    echo "> $TAG" 1>&2
-    exit 1
-  fi
-fi
-
-if [ "${platform:-x}" = "win64" ] || [ "${platform:-x}" = "win32" ]; then
-  extension='zip'
-else
-  extension='tar.gz'
-fi
-
-if [ "${platform:-x}" = "linux64" ]; then
-  # Detect musl libc (source: https://stackoverflow.com/a/60471114)
-  libc=$(ldd /bin/ls | grep 'musl' | head -1 | cut -d ' ' -f1)
-  if [ -n "$libc" ]; then
-    # Musl libc; use the staticly-compiled versioon
-    platform='linux64-static'
-  fi
-fi
-
-echo "Latest Version: $TAG"
-echo "Downloading https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension"
-
-eval "$http 'https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension'" > "micro.$extension"
-
-case "$extension" in
-  "zip") unzip -j "micro.$extension" -d "micro-$TAG" ;;
-  "tar.gz") tar -xvzf "micro.$extension" "micro-$TAG/micro" ;;
-esac
-
-mv "micro-$TAG/micro" ./micro
-
-rm "micro.$extension"
-rm -rf "micro-$TAG"
 
 cat <<-'EOM'
 
