@@ -2,25 +2,33 @@ name: Test
 on:
   push:
     branches:
-      - master
+      - '*'
   pull_request:
     branches:
-      - master
+      - '*'
 
 jobs:
 
   test:
-    name: Test on ${{ matrix.os }}
+    name: Test on ${{ matrix.os }} with ${{ matrix.update_alternatives }} update-alternatives
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04, macos-10.15, windows-2022]
+        os:
+        - ubuntu-18.04
+        - macos-10.15
+        - windows-2022
+        update_alternatives:
+        - y
+        - n
     steps:
     - name: Check out code
       uses: actions/checkout@v1
 
     - name: Test
+      env:
+        GETMICRO_REGISTER: ${{ matrix.update_alternatives }}
       run: ./ci/runTest.sh
       shell: bash
 
@@ -37,7 +45,7 @@ jobs:
         ./ci/runLint.sh
 
   test_vagrant:
-    name: Test on ${{ matrix.vagrant_dir }} with Vagrant
+    name: Test ${{ matrix.vagrant_dir }} with Vagrant
     runs-on: macos-10.15
     strategy:
       fail-fast: false
@@ -60,7 +68,7 @@ jobs:
       run: ./ci/runVagrantTest.sh ${{ matrix.vagrant_dir }}
 
   test_docker:
-    name: Test on ${{ matrix.docker_image }} with Bash in Docker
+    name: Test ${{ matrix.docker_image }} with ${{ matrix.update_alternatives }} update-alternatives
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -77,15 +85,20 @@ jobs:
         - bash:3.2
         - bash:3.1
         - bash:3.0
+        update_alternatives:
+        - y
+        - n
     steps:
     - name: Check out code
       uses: actions/checkout@v1
 
     - name: Test
+      env:
+        GETMICRO_REGISTER: ${{ matrix.update_alternatives }}
       run: ./ci/runDockerTest.sh ${{ matrix.docker_image }} bash
 
   test_shells:
-    name: Test alternate shell ${{ matrix.shell }} on Ubuntu docker
+    name: Test ${{ matrix.shell }} shell with ${{ matrix.update_alternatives }} update-alternatives
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -94,22 +107,54 @@ jobs:
         - zsh
         - dash
         - ksh
+        - mksh
+        - yash
+        - 'busybox sh'
+        - gash
+        - mrsh
+        #- 'toybox toysh'
+        #- oil
+        update_alternatives:
+        - y
+        - n
     steps:
     - name: Check out code
       uses: actions/checkout@v1
 
     - name: Test
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y ${{ matrix.shell }}
-        ./ci/runTest.sh ${{ matrix.shell }}
+      run: sudo GETMICRO_REGISTER=${{ matrix.update_alternatives }} ./ci/installAltShell.sh ${{ matrix.shell }}
 
   test_alpine:
-    name: Test busybox on alpine
-    runs-on: ubuntu-20.04
+    name: Test busybox on alpine with ${{ matrix.update_alternatives }} update-alternatives
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        update_alternatives:
+        - y
+        - n
     steps:
     - name: Check out code
       uses: actions/checkout@v1
 
     - name: Test
+      env:
+        GETMICRO_REGISTER: ${{ matrix.update_alternatives }}
       run: ./ci/runDockerTest.sh alpine:latest sh
+
+  check_readme_checksum:
+    name: Test ${{ matrix.readme_file }} checksum
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        readme_file:
+        - ./README.md
+        - ./README.fr.md
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v1
+
+    - name: Test
+      run: ./ci/checkREADMEchecksum.sh ${{ matrix.readme_file }}
+
