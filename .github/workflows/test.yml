@@ -141,20 +141,3 @@ jobs:
       env:
         GETMICRO_REGISTER: ${{ matrix.update_alternatives }}
       run: ./ci/runDockerTest.sh alpine:latest sh
-
-  check_readme_checksum:
-    name: Test ${{ matrix.readme_file }} checksum
-    runs-on: ubuntu-18.04
-    strategy:
-      fail-fast: false
-      matrix:
-        readme_file:
-        - ./README.md
-        - ./README.fr.md
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v1
-
-    - name: Test
-      run: ./ci/checkREADMEchecksum.sh ${{ matrix.readme_file }}
-
