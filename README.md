@@ -102,3 +102,5 @@ If you're not sure how to do any of these things, feel free to open a PR with yo
 - Loosely based on the Chef curl|bash: https://docs.chef.io/install_omnibus.html
 
 - ASCII art courtesy of figlet: http://www.figlet.org/
+
+<!--shasum=418e7d441f1ca25b487bd3c750c6bbc4537726f185ef28a519844225b3ef4716-->
