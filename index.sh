@@ -243,18 +243,29 @@ if [ "${altcmd:-x}" != "x" ] ; then
 |     update-alternatives detected     |
 \\=====================================/
 
+(Notice: getmicro must be run as root, e.x.: curl https://getmic.ro | sudo sh
+ otherwise, trying to y use this feature will fail.)
+ 
+(Notice: if you y use this feature and you put micro in a location unaccessible
+ to other users, this will break many tools such as crontab for other users.)
+
 getmicro can use update-alternatives to register micro as a system text editor.
 For example, this will allow `crontab -e` open the cron file with micro.
 
 To avoid this prompt in the future, define the GETMICRO_REGISTER variable. E.x:
 
-  $ curl https://getmic.ro | GETMICRO_REGISTER=y sh
+  $ curl https://getmic.ro | sudo GETMICRO_REGISTER=y sh
+  
+Or:
+
+  $ su - root -c "wget -O- https://getmic.ro | GETMICRO_REGISTER=y sh"
   
 Many people find it useful to make micro available on the PATH. One way to do
  this is to enter a root shell and run `cd /usr/bin` prior to installation.
 
+(IMPORTANT: Choose n if you are busy, confused, or might open a GitHub Issue.)
 EOM
-    cpt="Register '$wrkdir/micro' with update-alternatives [y/n]: "
+    cpt="Register '$wrkdir/micro' with update-alternatives (prefer n if busy) [y/n]: "
     if command -v printf >/dev/null 2>&1 ; then
       printf '%s' "$cpt" 1>&2
     else
