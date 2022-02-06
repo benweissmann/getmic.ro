@@ -298,10 +298,11 @@ EOM
     else
       cat 1>&2 << 'EOM'
 /=====================================\\
-|       INSUFFICIENT PRIVILEGES       |
+|    PLEASE READ THIS ERROR MESSAGE    |
 \\=====================================/
 
-Uh oh! We couldn't run update-alternatives due to insufficient privileges.
+There is a very easy fix for this error, as explained below. We couldn't run
+ update-alternatives due to insufficient privileges.
 
 To continue, try running getmicro as root or another privileged user. Examples:
 
