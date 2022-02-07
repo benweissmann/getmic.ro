@@ -266,24 +266,27 @@ Alternatively:
   $ curl https://getmic.ro/r | sudo sh
 
 EOM
-    # Resolves https://github.com/benweissmann/getmic.ro/pull/32#discussion_r800962643
     doRegister="n"
-    #cpt="Register '$wrkdir/micro' with update-alternatives (prefer n if unsure) [y/N]: "
-    #if command -v printf >/dev/null 2>&1 ; then
-    #  printf '%s' "$cpt" 1>&2
-    #else
-    #  # Wrapping this in eval helps this script to pass shellcheck
-    #  eval '( echo -n "$cpt" 2>/dev/null || echo -e "$cpt"'\''\c'\'' 2>/dev/null || echo "$cpt" ) 1>&2'
-    #fi
-    #if command -v head >/dev/null 2>&1 ; then
-    #  # needed when piping curl into sh as its a subshell so one must reopen the tty
-    #  doRegister="$(head -n1 /dev/tty)"
-    #elif command -v sed >/dev/null 2>&1 ; then
-    #  doRegister="$(sed 1q)"
-    #else
-    #  read -r doRegister
-    #fi
-    #echo # add new line after long message and user input for prettier output
+    cat >/dev/null << 'NUL'
+    # Commenting this out resolves https://github.com/benweissmann/getmic.ro/pull/32#discussion_r800962643
+    
+    cpt="Register '$wrkdir/micro' with update-alternatives (prefer n if unsure) [y/N]: "
+    if command -v printf >/dev/null 2>&1 ; then
+      printf '%s' "$cpt" 1>&2
+    else
+      # Wrapping this in eval helps this script to pass shellcheck
+      eval '( echo -n "$cpt" 2>/dev/null || echo -e "$cpt"'\''\c'\'' 2>/dev/null || echo "$cpt" ) 1>&2'
+    fi
+    if command -v head >/dev/null 2>&1 ; then
+      # needed when piping curl into sh as its a subshell so one must reopen the tty
+      doRegister="$(head -n1 /dev/tty)"
+    elif command -v sed >/dev/null 2>&1 ; then
+      doRegister="$(sed 1q)"
+    else
+      read -r doRegister
+    fi
+    echo # add new line after long message and user input for prettier output
+NUL
   else
     # default to not installing
     doRegister="n"
