@@ -240,19 +240,20 @@ if [ "${altcmd:-x}" != "x" ] ; then
   elif [ $isatty -eq 1 ] ; then
     cat 1>&2 << 'EOM'
 /=====================================\\
-|     update-alternatives detected     |
+|   update-alternatives is supported   |
 \\=====================================/
 
-(Notice: getmicro must be run as root, e.x.: curl https://getmic.ro | sudo sh
- otherwise, trying to y use this feature will fail.)
+TL;DR: This is an optional feature that is safely disabled by default. If this
+ is confusing or you are short on time, you can skip reading this message.
  
 (Notice: if you y use this feature and you put micro in a location unaccessible
- to other users, this will break many tools such as crontab for other users.)
+ to other users, this will break many tools such as crontab for other users.
+ Please run `cd /usr/bin` prior to installation to prevent this conundrum.)
 
 getmicro can use update-alternatives to register micro as a system text editor.
 For example, this will allow `crontab -e` open the cron file with micro.
 
-To avoid this prompt in the future, define the GETMICRO_REGISTER variable. E.x:
+To enable this opt-in feature, define the GETMICRO_REGISTER variable. E.x:
 
   $ curl https://getmic.ro | sudo GETMICRO_REGISTER=y sh
   
@@ -260,33 +261,36 @@ Or:
 
   $ su - root -c "wget -O- https://getmic.ro | GETMICRO_REGISTER=y sh"
   
-Many people find it useful to make micro available on the PATH. One way to do
- this is to enter a root shell and run `cd /usr/bin` prior to installation.
+Alternatively:
 
-(IMPORTANT: Choose n if you are busy, confused, or might open a GitHub Issue.)
+  $ curl https://getmic.ro/r | sudo sh
+
 EOM
-    cpt="Register '$wrkdir/micro' with update-alternatives (prefer n if busy) [y/n]: "
-    if command -v printf >/dev/null 2>&1 ; then
-      printf '%s' "$cpt" 1>&2
-    else
-      # Wrapping this in eval helps this script to pass shellcheck
-      eval '( echo -n "$cpt" 2>/dev/null || echo -e "$cpt"'\''\c'\'' 2>/dev/null || echo "$cpt" ) 1>&2'
-    fi
-    if command -v head >/dev/null 2>&1 ; then
-      # needed when piping curl into sh as its a subshell so one must reopen the tty
-      doRegister="$(head -n1 /dev/tty)"
-    elif command -v sed >/dev/null 2>&1 ; then
-      doRegister="$(sed 1q)"
-    else
-      read -r doRegister
-    fi
-    echo # add new line after long message and user input for prettier output
+    # Resolves https://github.com/benweissmann/getmic.ro/pull/32#discussion_r800962643
+    doRegister=n
+    #cpt="Register '$wrkdir/micro' with update-alternatives (prefer n if unsure) [y/N]: "
+    #if command -v printf >/dev/null 2>&1 ; then
+    #  printf '%s' "$cpt" 1>&2
+    #else
+    #  # Wrapping this in eval helps this script to pass shellcheck
+    #  eval '( echo -n "$cpt" 2>/dev/null || echo -e "$cpt"'\''\c'\'' 2>/dev/null || echo "$cpt" ) 1>&2'
+    #fi
+    #if command -v head >/dev/null 2>&1 ; then
+    #  # needed when piping curl into sh as its a subshell so one must reopen the tty
+    #  doRegister="$(head -n1 /dev/tty)"
+    #elif command -v sed >/dev/null 2>&1 ; then
+    #  doRegister="$(sed 1q)"
+    #else
+    #  read -r doRegister
+    #fi
+    #echo # add new line after long message and user input for prettier output
   else
     # default to not installing
     doRegister="n"
   fi
   
-  if [ "${doRegister:-x}" = "y" ] ; then
+  # case-insensitively matches y or yes
+  if echo 'x${doRegister:-x}' | grep -Eqie '^xy(es)?$' ; then
     if [ -w /etc/alternatives ] ; then # if we have write permission to /etc/alternatives
       # hope we are effectively running as root
       echo "Installing '$wrkdir/micro' as /usr/bin/editor..."
@@ -309,7 +313,7 @@ EOM
     else
       cat 1>&2 << 'EOM'
 /=====================================\\
-|    PLEASE READ THIS ERROR MESSAGE    |
+|       INSUFFICIENT PRIVILEGES       |
 \\=====================================/
 
 There is a very easy fix for this error, as explained below. We couldn't run
