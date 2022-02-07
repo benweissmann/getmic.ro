@@ -27,6 +27,7 @@ cat index.sh | withsudo $shell
 if [ "x$GETMICRO_REGISTER" = "xy" ] && command -v update-alternatives 2>/dev/null ; then
   if ! realpath /usr/bin/editor | grep -q micro ; then
     echo 'Fail: requested GETMICRO_REGISTER=y but /usr/bin/editor does not point to micro'
+    exit 1
   fi
 fi
 
