@@ -267,7 +267,7 @@ Alternatively:
 
 EOM
     # Resolves https://github.com/benweissmann/getmic.ro/pull/32#discussion_r800962643
-    doRegister=n
+    doRegister="n"
     #cpt="Register '$wrkdir/micro' with update-alternatives (prefer n if unsure) [y/N]: "
     #if command -v printf >/dev/null 2>&1 ; then
     #  printf '%s' "$cpt" 1>&2
@@ -290,7 +290,7 @@ EOM
   fi
   
   # case-insensitively matches y or yes
-  if echo 'x${doRegister:-x}' | grep -Eqie '^xy(es)?$' ; then
+  if echo "x${doRegister:-x}" | grep -Eqie '^xy(es)?$' ; then
     if [ -w /etc/alternatives ] ; then # if we have write permission to /etc/alternatives
       # hope we are effectively running as root
       echo "Installing '$wrkdir/micro' as /usr/bin/editor..."
