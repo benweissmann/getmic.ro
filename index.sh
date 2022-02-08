@@ -253,14 +253,11 @@ For example, this will allow `crontab -e` open the cron file with micro.
 
 To enable this opt-in feature, define the GETMICRO_REGISTER variable. E.x:
 
-  $ curl https://getmic.ro | sudo GETMICRO_REGISTER=y sh
+  $ su - root -c "cd /usr/bin; wget -O- https://getmic.ro | GETMICRO_REGISTER=y sh"
   
-Or:
+Alternatively, https://getmic.ro/r will define GETMICRO_REGISTER=y for you:
 
-  $ su - root -c "wget -O- https://getmic.ro | GETMICRO_REGISTER=y sh"
-  
-Alternatively:
-
+  $ cd /usr/bin
   $ curl https://getmic.ro/r | sudo sh
 
 EOM
@@ -292,13 +289,14 @@ NUL
   
   # case-insensitively matches y or yes
   if [ "${doRegister:-n}" = "n" ] ; then
-    if [ -w /etc/alternatives ] ; then # if we have write permission to /etc/alternatives
+    # Next, check if we have write permission to /etc/alternatives or other sufficient priviledges
+    if [ -w /etc/alternatives ] || [ -w /usr/bin/editor ] || (id | grep -Eqe '^uid=0[(]|[(]wheel[)]|[(]root[)]' 1>/dev/null 2>&1) ; then
       # Show a status message that indicates what is going on
-      cat << 'EOM'
-/=====================================\\
-| Registering with update-alternatives |
-\\=====================================/
-EOM
+      echo '/=====================================\\'
+      echo '| Registering with update-alternatives |'
+      echo '\\=====================================/'
+      echo
+      
       # hope we are effectively running as root
       echo "Installing '$wrkdir/micro' as /usr/bin/editor..."
       $altcmd --install /usr/bin/editor editor "$wrkdir/micro" 80
