@@ -288,11 +288,11 @@ NUL
   fi
   
   # case-insensitively matches y or yes
-  if [ "${doRegister:-n}" = "n" ] ; then
+  if [ "${doRegister:-n}" = "y" ] ; then
     # Next, check if we have write permission to /etc/alternatives or other sufficient priviledges
     if [ -w /etc/alternatives ] || [ -w /usr/bin/editor ] || (id | grep -Eqe '^uid=0[(]|[(]wheel[)]|[(]root[)]' 1>/dev/null 2>&1) ; then
       # Show a status message that indicates what is going on
-      echo '/=====================================\\'
+      echo '/====================================='\\
       echo '| Registering with update-alternatives |'
       echo '\\=====================================/'
       echo
@@ -321,8 +321,7 @@ NUL
 |       INSUFFICIENT PRIVILEGES       |
 \\=====================================/
 
-There is a very easy fix for this error, as explained below. We couldn't run
- update-alternatives due to insufficient privileges.
+ Uh oh! We couldn't run update-alternatives due to insufficient privileges.
 
 To continue, try running getmicro as root or another privileged user. Examples:
 
