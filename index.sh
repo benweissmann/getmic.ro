@@ -231,9 +231,9 @@ doRegister="n"
 if [ "${altcmd:-x}" != "x" ] ; then
   wrkdir="$(pwd)"
   
-  if echo "${GETMICRO_REGISTER:-x}" | grep -Eqie '^xn(o)?$' 1>/dev/null 2>&1 ; then
+  if echo "x${GETMICRO_REGISTER:-x}" | grep -Eqie '^xn(o)?$' 1>/dev/null 2>&1 ; then
     doRegister="n"
-  elif echo "${GETMICRO_REGISTER:-x}" | grep -Eqie '^xy(es)?$' 1>/dev/null 2>&1 ; then
+  elif echo "x${GETMICRO_REGISTER:-x}" | grep -Eqie '^xy(es)?$' 1>/dev/null 2>&1 ; then
     doRegister="y"
   elif [ -t 0 ] || [ -t 2 ] ; then # Check if there is a user viewing this message
     cat 1>&2 << 'EOM'
@@ -321,7 +321,7 @@ NUL
 |       INSUFFICIENT PRIVILEGES       |
 \\=====================================/
 
- Uh oh! We couldn't run update-alternatives due to insufficient privileges.
+Uh oh! We couldn't run update-alternatives due to insufficient privileges.
 
 To continue, try running getmicro as root or another privileged user. Examples:
 
