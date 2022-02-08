@@ -218,6 +218,7 @@ mv "micro-$TAG/micro" ./micro
 rm "micro.$extension"
 rm -rf "micro-$TAG"
 
+altcmd=""
 if command -v alternatives >/dev/null 2>&1 ; then
   # RHEL family(?)
   altcmd="alternatives"
@@ -226,18 +227,15 @@ elif command -v update-alternatives >/dev/null 2>&1 ; then
   altcmd="update-alternatives"
 fi
 
+doRegister="n"
 if [ "${altcmd:-x}" != "x" ] ; then
   wrkdir="$(pwd)"
   
-  isatty=0
-  if [ -t 0 ] || [ -t 2 ] ; then # When piping into get micro, e.g. `curl https://getmic.ro | `
-    isatty=1
-  fi
-  if [ "${GETMICRO_REGISTER:-x}" = "n" ] || [ "${GETMICRO_REGISTER:-x}" = "N" ] ; then
+  if echo "${GETMICRO_REGISTER:-x}" | grep -Eqie '^xn(o)?$' 1>/dev/null 2>&1 ; then
     doRegister="n"
-  elif [ "${GETMICRO_REGISTER:-x}" = "y" ] || [ "${GETMICRO_REGISTER:-x}" = "Y" ] ; then
+  elif echo "${GETMICRO_REGISTER:-x}" | grep -Eqie '^xy(es)?$' 1>/dev/null 2>&1 ; then
     doRegister="y"
-  elif [ $isatty -eq 1 ] ; then
+  elif [ -t 0 ] || [ -t 2 ] ; then # Check if there is a user viewing this message
     cat 1>&2 << 'EOM'
 /=====================================\\
 |   update-alternatives is supported   |
@@ -293,8 +291,14 @@ NUL
   fi
   
   # case-insensitively matches y or yes
-  if echo "x${doRegister:-x}" | grep -Eqie '^xy(es)?$' ; then
+  if [ "${doRegister:-n}" = "n" ] ; then
     if [ -w /etc/alternatives ] ; then # if we have write permission to /etc/alternatives
+      # Show a status message that indicates what is going on
+      cat << 'EOM'
+/=====================================\\
+| Registering with update-alternatives |
+\\=====================================/
+EOM
       # hope we are effectively running as root
       echo "Installing '$wrkdir/micro' as /usr/bin/editor..."
       $altcmd --install /usr/bin/editor editor "$wrkdir/micro" 80
