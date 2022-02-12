@@ -69,7 +69,7 @@ else
 
 Uh oh! We couldn't find either curl or wget installed on your system.
 
-To continue with installation, you have two options--A or B.
+To continue with installation, you have two options:
 
 A. Install either wget or curl on your system. You may need to run `hash -r`.
 
@@ -241,47 +241,26 @@ if [ "${altcmd:-x}" != "x" ] ; then
 |   update-alternatives is supported   |
 \\=====================================/
 
-TL;DR: This is an optional feature that is safely disabled by default. If this
- is confusing or you are short on time, you can skip reading this message.
- 
-(Notice: if you y use this feature and you put micro in a location unaccessible
- to other users, this will break many tools such as crontab for other users.
- Please run `cd /usr/bin` prior to installation to prevent this conundrum.)
-
 getmicro can use update-alternatives to register micro as a system text editor.
 For example, this will allow `crontab -e` open the cron file with micro.
 
-To enable this opt-in feature, define the GETMICRO_REGISTER variable. E.x:
+To enable this feature, define the GETMICRO_REGISTER variable or use the URL
+`https://getmic.ro/r`.
 
-  $ su - root -c "cd /usr/bin; wget -O- https://getmic.ro | GETMICRO_REGISTER=y sh"
-  
-Alternatively, https://getmic.ro/r will define GETMICRO_REGISTER=y for you:
+Note that you must install micro to a directory accessible to all users when doing
+this, typically /usr/bin. cd to that directory before running this script.
+
+E.g.:
 
   $ cd /usr/bin
   $ curl https://getmic.ro/r | sudo sh
 
+or
+
+  $ su - root -c "cd /usr/bin; wget -O- https://getmic.ro | GETMICRO_REGISTER=y sh"
+
 EOM
     doRegister="n"
-    cat >/dev/null << 'NUL'
-    # Commenting this out resolves https://github.com/benweissmann/getmic.ro/pull/32#discussion_r800962643
-    
-    cpt="Register '$wrkdir/micro' with update-alternatives (prefer n if unsure) [y/N]: "
-    if command -v printf >/dev/null 2>&1 ; then
-      printf '%s' "$cpt" 1>&2
-    else
-      # Wrapping this in eval helps this script to pass shellcheck
-      eval '( echo -n "$cpt" 2>/dev/null || echo -e "$cpt"'\''\c'\'' 2>/dev/null || echo "$cpt" ) 1>&2'
-    fi
-    if command -v head >/dev/null 2>&1 ; then
-      # needed when piping curl into sh as its a subshell so one must reopen the tty
-      doRegister="$(head -n1 /dev/tty)"
-    elif command -v sed >/dev/null 2>&1 ; then
-      doRegister="$(sed 1q)"
-    else
-      read -r doRegister
-    fi
-    echo # add new line after long message and user input for prettier output
-NUL
   else
     # default to not installing
     doRegister="n"
@@ -325,11 +304,11 @@ Uh oh! We couldn't run update-alternatives due to insufficient privileges.
 
 To continue, try running getmicro as root or another privileged user. Examples:
 
-  $ curl https://getmic.ro | sudo sh
+  $ curl https://getmic.ro/r | sudo sh
   
 Or:
 
-  $ su - root -c "wget -O- https://getmic.ro | sh"
+  $ su - root -c "wget -O- https://getmic.ro | GETMICRO_REGISTER=y sh"
 
 EOM
       exit 1
@@ -338,6 +317,7 @@ EOM
 fi
 
 cat <<-'EOM'
+
 
  __  __ _                  ___           _        _ _          _ _
 |  \/  (_) ___ _ __ ___   |_ _|_ __  ___| |_ __  | | | ___  __| | |
