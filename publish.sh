@@ -22,9 +22,9 @@ fi
 
 # according to order of operations, this is ! ( cmdexists aws && cmdexists git )
 if ! cmdexists aws && cmdexists git ; then
-  echo 'Need to install aws and git in order to proceed. Try:' 1>&
+  echo 'Need to install aws and git in order to proceed. Try:'
   echo ''
-  echo ' $ sudo apt-get install -y awscli git;
+  echo ' $ sudo apt-get install -y awscli git;'
   echo ''
   exit 1
 fi
