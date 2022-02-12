@@ -24,11 +24,17 @@ cd /usr/bin
 curl https://getmic.ro | sudo sh
 ```
 
-Or, using wget and su in place of curl and sudo:
+This script can also use update-alternatives to register micro as a system text editor.
+For example, this will allow `crontab -e` open the cron file with micro.
+
+To enable this feature, define the `GETMICRO_REGISTER` variable or use the URL
+`https://getmic.ro/r`. Note that you must install micro to a directory
+accessible to all users when doing this, typically /usr/bin:
 
 ```Bash
-# global install for all users
-su - root -c 'cd /usr/bin; wget -O- https://getmic.ro sh'
+# global install for all users, registering with update-alternatives
+cd /usr/bin
+curl https://getmic.ro/r | sudo sh
 ```
 
 > Vous ne comprenez pas l'anglais? vous parlez français? **Regardez le [*LISEZ-MOI* français](./README.fr.md)!**
@@ -51,13 +57,10 @@ There's a couple other things you can do with getmic.ro. Listed below are enviro
 * `GETMICRO_REGISTER=[y | n]`
     + Whether to register micro with `update-alternatives` so you can seamlessly use micro as the system text editor.
         - y => yes
-        - n => no
-    + Defaults to `GETMICRO_REGISTER=n` if left unspecified and no interactive TTY is detected.
+        - n => no (the default)
     + If GETMICRO_REGISTER is defined but the system does not support `update-alternatives`, then this option is silently ignored.
     + When enabled, getmicro must be running with sufficient priveledges (typically the root user) to use `update-alternatives`, otherwise getmicro will exit with an error.
-    + Specifying this variable will skip the prompt when an interactive TTY is detected.
-    + For example, to never register: `curl https://getmic.ro | GETMICRO_REGISTER=n sh`
-    + For example, to always register: `curl https://getmic.ro | GETMICRO_REGISTER=y sh`
+    + As a shorthand, you can use `https://getmic.ro/r` which defines `GETMICRO_REGISTER=y`.
 
 Putting it all together, the following command line would always use wget, always install the linux32 binaries, and always register with `update-alternatives`:
 
