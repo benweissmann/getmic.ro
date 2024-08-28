@@ -210,7 +210,7 @@ eval "$http 'https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TA
 
 case "$extension" in
   "zip") unzip -j "micro.$extension" -d "micro-$TAG" ;;
-  "tar.gz") tar -xvzf "micro.$extension" "micro-$TAG/micro" ;;
+  "tgz") tar -xvzf "micro.$extension" "micro-$TAG/micro" ;;
 esac
 
 mv "micro-$TAG/micro" ./micro
