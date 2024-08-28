@@ -191,7 +191,7 @@ fi
 if [ "${platform:-x}" = "win64" ] || [ "${platform:-x}" = "win32" ]; then
   extension='zip'
 else
-  extension='tar.gz'
+  extension='tgz'
 fi
 
 if [ "${platform:-x}" = "linux64" ]; then
