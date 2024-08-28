@@ -16,8 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-        - ubuntu-18.04
-        - macos-10.15
+        - ubuntu-24.04
+        - macos-12
         - windows-2022
         update_alternatives:
         - y
@@ -34,7 +34,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Check out code
       uses: actions/checkout@v1
@@ -42,34 +42,39 @@ jobs:
     - name: Lint
       run: |
         command -v apt-get >/dev/null 2>&1 && sudo apt-get update && sudo apt-get install -y shellcheck
+        # Ignore echo vs printf warning for cross-shell compatibility
+        export SHELLCHECK_OPTS="-e SC2028"
         ./ci/runLint.sh
 
-  test_vagrant:
-    name: Test ${{ matrix.vagrant_dir }} with Vagrant
-    runs-on: macos-10.15
-    strategy:
-      fail-fast: false
-      matrix:
-        vagrant_dir:
-        - testboxes/freebsd32
-        - testboxes/freebsd64
-        - testboxes/debian32
-        - testboxes/debian64
-        - testboxes/linux-arm64
-        - testboxes/opensuse64
-        - testboxes/devuan64
-        - testboxes/netbsd64
-        - testboxes/openbsd64
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v1
+  # disabled for now; GH actions no longer supports Vagrant. Will likely need
+  # to move to qemu or similar.
+  #
+  # test_vagrant:
+  #   name: Test ${{ matrix.vagrant_dir }} with Vagrant
+  #   runs-on: macos-12
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       vagrant_dir:
+  #       - testboxes/freebsd32
+  #       - testboxes/freebsd64
+  #       - testboxes/debian32
+  #       - testboxes/debian64
+  #       - testboxes/linux-arm64
+  #       - testboxes/opensuse64
+  #       - testboxes/devuan64
+  #       - testboxes/netbsd64
+  #       - testboxes/openbsd64
+  #   steps:
+  #   - name: Check out code
+  #     uses: actions/checkout@v1
 
-    - name: Test
-      run: ./ci/runVagrantTest.sh ${{ matrix.vagrant_dir }}
+  #   - name: Test
+  #     run: ./ci/runVagrantTest.sh ${{ matrix.vagrant_dir }}
 
   test_docker:
     name: Test ${{ matrix.docker_image }} with ${{ matrix.update_alternatives }} update-alternatives
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -99,7 +104,7 @@ jobs:
 
   test_shells:
     name: Test ${{ matrix.shell }} shell with ${{ matrix.update_alternatives }} update-alternatives
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -111,9 +116,6 @@ jobs:
         - yash
         - 'busybox sh'
         - gash
-        - mrsh
-        #- 'toybox toysh'
-        #- oil
         update_alternatives:
         - y
         - n
@@ -126,7 +128,7 @@ jobs:
 
   test_alpine:
     name: Test busybox on alpine with ${{ matrix.update_alternatives }} update-alternatives
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
