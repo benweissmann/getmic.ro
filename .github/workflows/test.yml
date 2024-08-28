@@ -16,8 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-        - ubuntu-18.04
-        - macos-10.15
+        - ubuntu-24.04
+        - macos-13
         - windows-2022
         update_alternatives:
         - y
@@ -34,7 +34,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Check out code
       uses: actions/checkout@v1
@@ -46,7 +46,7 @@ jobs:
 
   test_vagrant:
     name: Test ${{ matrix.vagrant_dir }} with Vagrant
-    runs-on: macos-10.15
+    runs-on: macos-13
     strategy:
       fail-fast: false
       matrix:
@@ -111,9 +111,6 @@ jobs:
         - yash
         - 'busybox sh'
         - gash
-        - mrsh
-        #- 'toybox toysh'
-        #- oil
         update_alternatives:
         - y
         - n
@@ -126,7 +123,7 @@ jobs:
 
   test_alpine:
     name: Test busybox on alpine with ${{ matrix.update_alternatives }} update-alternatives
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
