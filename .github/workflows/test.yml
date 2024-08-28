@@ -42,6 +42,8 @@ jobs:
     - name: Lint
       run: |
         command -v apt-get >/dev/null 2>&1 && sudo apt-get update && sudo apt-get install -y shellcheck
+        # Ignore echo vs printf warning for cross-shell compatibility
+        export SHELLCHECK_OPTS="-e SC2028"
         ./ci/runLint.sh
 
   test_vagrant:
