@@ -46,28 +46,31 @@ jobs:
         export SHELLCHECK_OPTS="-e SC2028"
         ./ci/runLint.sh
 
-  test_vagrant:
-    name: Test ${{ matrix.vagrant_dir }} with Vagrant
-    runs-on: macos-12
-    strategy:
-      fail-fast: false
-      matrix:
-        vagrant_dir:
-        - testboxes/freebsd32
-        - testboxes/freebsd64
-        - testboxes/debian32
-        - testboxes/debian64
-        - testboxes/linux-arm64
-        - testboxes/opensuse64
-        - testboxes/devuan64
-        - testboxes/netbsd64
-        - testboxes/openbsd64
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v1
+  # disabled for now; GH actions no longer supports Vagrant. Will likely need
+  # to move to qemu or similar.
+  #
+  # test_vagrant:
+  #   name: Test ${{ matrix.vagrant_dir }} with Vagrant
+  #   runs-on: macos-12
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       vagrant_dir:
+  #       - testboxes/freebsd32
+  #       - testboxes/freebsd64
+  #       - testboxes/debian32
+  #       - testboxes/debian64
+  #       - testboxes/linux-arm64
+  #       - testboxes/opensuse64
+  #       - testboxes/devuan64
+  #       - testboxes/netbsd64
+  #       - testboxes/openbsd64
+  #   steps:
+  #   - name: Check out code
+  #     uses: actions/checkout@v1
 
-    - name: Test
-      run: ./ci/runVagrantTest.sh ${{ matrix.vagrant_dir }}
+  #   - name: Test
+  #     run: ./ci/runVagrantTest.sh ${{ matrix.vagrant_dir }}
 
   test_docker:
     name: Test ${{ matrix.docker_image }} with ${{ matrix.update_alternatives }} update-alternatives
