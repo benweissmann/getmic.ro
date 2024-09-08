@@ -191,7 +191,7 @@ fi
 if [ "${platform:-x}" = "win64" ] || [ "${platform:-x}" = "win32" ]; then
   extension='zip'
 else
-  extension='tgz'
+  extension='tar.gz'
 fi
 
 if [ "${platform:-x}" = "linux64" ]; then
@@ -210,7 +210,7 @@ eval "$http 'https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TA
 
 case "$extension" in
   "zip") unzip -j "micro.$extension" -d "micro-$TAG" ;;
-  "tgz") tar -xvzf "micro.$extension" "micro-$TAG/micro" ;;
+  "tar.gz") tar -xvzf "micro.$extension" "micro-$TAG/micro" ;;
 esac
 
 mv "micro-$TAG/micro" ./micro
