@@ -101,7 +101,12 @@ else
         *"64") platform='linux64' ;;
       esac
       ;;
-    "darwin") platform='osx' ;;
+    "darwin") 
+      case "$machine" in
+        "arm64") platform='macos-arm64' ;;
+        "x86_64") platform='osx' ;;
+	  esac
+	  ;;
     *"freebsd"*)
       case "$machine" in
         *"86") platform='freebsd32' ;;
@@ -146,6 +151,7 @@ To continue with installation, please choose from one of the following values:
 - linux-arm64
 - linux32
 - linux64
+- macos-arm64
 - netbsd32
 - netbsd64
 - openbsd32
