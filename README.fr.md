@@ -42,7 +42,7 @@ Vous pouvez aussi faire d'autres choses avec getmic.ro. La documentation França
 * `GETMICRO_HTTP=<COMMAND ...ARGS>`
     + Exemple: `curl https://getmic.ro | GETMICRO_HTTP="curl -L" sh`
     + Exemple: `wget -O- https://getmic.ro | GETMICRO_HTTP="wget -O-" sh`
-* `GETMICRO_PLATFORM=[freebsd32 | freebsd64 linux-arm | linux-arm64 | linux32 | linux64 | linux64-static | netbsd32 | netbsd64 | openbsd32 | openbsd64 | osx | win32 | win64]`
+* `GETMICRO_PLATFORM=[freebsd32 | freebsd64 linux-arm | linux-arm64 | linux32 | linux64 | linux64-static | macos-arm64 | netbsd32 | netbsd64 | openbsd32 | openbsd64 | osx | win32 | win64]`
     + Par défaut: `GETMICRO_PLATFORM=n`
     + Par exemple, si votre libc est musl, alors: `https://getmic.ro | GETMICRO_PLATFORM=linux64-static sh`
 * `GETMICRO_REGISTER=[y | n]`
