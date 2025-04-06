@@ -51,7 +51,7 @@ There's a couple other things you can do with getmic.ro. Listed below are enviro
         - It IS OPTIONAL for the command to also accept a `--header` parameter used for non-essential GitHub authentication fallback shim.
     + For example, to force using `curl`, do: `curl https://getmic.ro | GETMICRO_HTTP="curl -L" sh`
     + For example, to force using `wget`, do: `wget -O- https://getmic.ro | GETMICRO_HTTP="wget -O-" sh`
-* `GETMICRO_PLATFORM=[freebsd32 | freebsd64 linux-arm | linux-arm64 | linux32 | linux64 | linux64-static | netbsd32 | netbsd64 | openbsd32 | openbsd64 | osx | win32 | win64]`
+* `GETMICRO_PLATFORM=[freebsd32 | freebsd64 linux-arm | linux-arm64 | linux32 | linux64 | linux64-static | macos-arm64 | netbsd32 | netbsd64 | openbsd32 | openbsd64 | osx | win32 | win64]`
     + This manually overrides the platform detection mechanism and downloads the binaries for the platform you specify
     + One usage of this is specifying `https://getmic.ro | GETMICRO_PLATFORM=linux64-static sh` when using an incompatible libc implementation such as musl.
 * `GETMICRO_REGISTER=[y | n]`
