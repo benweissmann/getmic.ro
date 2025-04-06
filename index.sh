@@ -104,7 +104,7 @@ else
     "darwin") 
       case "$machine" in
         "arm64") platform='macos-arm64' ;;
-        "x86_64") platform='osx' ;;
+        *) platform='osx' ;;
 	  esac
 	  ;;
     *"freebsd"*)
