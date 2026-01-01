@@ -75,7 +75,7 @@ To verify the script, you can download it and checksum it. The sha256 checksum i
 ```Bash
 gmcr="$(curl https://getmic.ro)" && [ $(echo "$gmcr" | shasum -a 256 | cut -d' ' -f1) = 4b7b9d3062183f1010d5b0b919673ea532725d1fd01c875c29117905a3681fc9 ] && echo "$gmcr" | sh
 ```
-    
+
 Alternatively, you can use the following manual method.
 
 ```Bash
@@ -105,3 +105,5 @@ If you're not sure how to do any of these things, feel free to open a PR with yo
 - Loosely based on the Chef curl|bash: https://docs.chef.io/install_omnibus.html
 
 - ASCII art courtesy of figlet: http://www.figlet.org/
+
+<!--shasum=4b7b9d3062183f1010d5b0b919673ea532725d1fd01c875c29117905a3681fc9-->
