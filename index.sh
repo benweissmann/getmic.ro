@@ -173,7 +173,7 @@ else
   echo "Detected platform: $platform"
 fi
 
-TAG=$(githubLatestTag zyedidia/micro)
+TAG=$(githubLatestTag micro-editor/micro)
 
 if command -v grep >/dev/null 2>&1 ; then
   if ! echo "v$TAG" | grep -E '^v[0-9]+[.][0-9]+[.][0-9]+$' >/dev/null 2>&1 ; then
@@ -201,9 +201,9 @@ else
 fi
 
 echo "Latest Version: $TAG"
-echo "Downloading https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension"
+echo "Downloading https://github.com/micro-editor/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension"
 
-eval "$http 'https://github.com/zyedidia/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension'" > "micro.$extension"
+eval "$http 'https://github.com/micro-editor/micro/releases/download/v$TAG/micro-$TAG-$platform.$extension'" > "micro.$extension"
 
 case "$extension" in
   "zip") unzip -j "micro.$extension" -d "micro-$TAG" ;;
